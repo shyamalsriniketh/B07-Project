@@ -1,4 +1,4 @@
-package com.example.smartair;
+package com.example.myapplication;
 
 public class Provider extends User {
     public Provider(String email, String password) {
