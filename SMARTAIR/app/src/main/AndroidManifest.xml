@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SMARTAIR">
         <activity
-            android:name=".Register"
+            android:name=".RoleSelectionActivity"
             android:exported="false" />
         <activity
             android:name=".Login"
