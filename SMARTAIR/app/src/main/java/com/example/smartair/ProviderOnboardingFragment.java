@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.smartair;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

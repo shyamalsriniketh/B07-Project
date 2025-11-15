@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.smartair;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
