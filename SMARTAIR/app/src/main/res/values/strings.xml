@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">SMART AIR</string>
+    <string name="login">Login</string>
+    <string name="enter_email_or_username">Enter Email or Username</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="register">Register</string>
+    <string name="click_to_register">Click to register</string>
+
 </resources>
