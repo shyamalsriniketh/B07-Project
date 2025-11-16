@@ -19,5 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "SMART AIR"
+rootProject.name = "My Application"
 include(":app")
+ 
