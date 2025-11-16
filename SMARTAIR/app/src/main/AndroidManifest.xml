@@ -16,6 +16,7 @@
 
 
         <activity android:name=".Parent_Sign_In" />
+        <activity android:name=".OnboardingActivity" />
         <activity
             android:name=".RoleSelectionActivity"
             android:exported="false" />
