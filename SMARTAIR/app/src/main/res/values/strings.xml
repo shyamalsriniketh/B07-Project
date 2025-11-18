@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">SMART AIR</string>
+    <string name="app_name">smartair</string>
+    <string name="parentf1">parentf1</string>
 </resources>
