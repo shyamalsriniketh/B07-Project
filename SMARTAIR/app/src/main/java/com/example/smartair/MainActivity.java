@@ -24,5 +24,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    public void roleselec(View v){
+        Intent i = new Intent(this, RoleSelectionActivity.class);
+        startActivity(i);
+    }
 
 }

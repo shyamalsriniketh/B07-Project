@@ -2,13 +2,13 @@ package com.example.smartair;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import android.view.View;
 
 public class RoleSelectionActivity extends AppCompatActivity {
 
@@ -26,6 +26,10 @@ public class RoleSelectionActivity extends AppCompatActivity {
     }
     public void launchSignupParent(View v){
         Intent i = new Intent(this,Parent_Sign_In.class);
+        startActivity(i);
+    }
+    public void launchSignupProvider(View v){
+        Intent i = new Intent(this, Provider_Sign_in.class);
         startActivity(i);
     }
 }

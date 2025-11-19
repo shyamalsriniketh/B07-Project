@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class Parent_Sign_In extends AppCompatActivity {
+public class Provider_Sign_in extends AppCompatActivity {
     EditText emailfield;
     EditText passwordfield;
     Button saveButton;
@@ -25,25 +25,25 @@ public class Parent_Sign_In extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_parent_sign_in);
+        setContentView(R.layout.activity_provider_sign_in);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
         mAuth = FirebaseAuth.getInstance();
+
         emailfield = findViewById(R.id.ProviderTextEmailAddress);
         passwordfield = findViewById(R.id.ProviderTextTextPassword);
         saveButton = findViewById(R.id.button7);
         saveButton.setOnClickListener(v -> save_button());
     }
     private void save_button(){
-
         String email = emailfield.getText().toString();
         String password = passwordfield.getText().toString();
-        Parent parent = new Parent(email, password);
+        Provider provider = new Provider(email, password);
         String uid = mAuth.getCurrentUser().getUid();
-        db.getReference("users").child("parents").child(uid).setValue(parent);
+        db.getReference("users").child("providers").child(uid).setValue(provider);
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
@@ -61,5 +61,6 @@ public class Parent_Sign_In extends AppCompatActivity {
 
 
     }
+    
 
 }
