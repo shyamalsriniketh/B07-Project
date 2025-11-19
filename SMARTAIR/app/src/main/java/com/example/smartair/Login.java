@@ -58,6 +58,10 @@ public class Login extends AppCompatActivity {
                 Toast.makeText(Login.this, "Enter password", Toast.LENGTH_SHORT).show();
             }
 
+            if (!(emailOrUsername.contains("@"))) {
+                emailOrUsername += AddChildActivity.DOMAIN;
+            }
+
             mAuth.signInWithEmailAndPassword(emailOrUsername, password)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
