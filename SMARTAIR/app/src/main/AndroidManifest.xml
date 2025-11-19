@@ -13,8 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SMARTAIR">
-
-
+        <activity
+            android:name=".Provider_Sign_in"
+            android:exported="false" />
         <activity android:name=".Parent_Sign_In" />
         <activity android:name=".OnboardingActivity" />
         <activity
