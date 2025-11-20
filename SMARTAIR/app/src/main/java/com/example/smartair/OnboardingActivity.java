@@ -1,16 +1,19 @@
 package com.example.smartair;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-
+import android.util.Log;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
-
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,24 +21,43 @@ import java.util.List;
 
 public class OnboardingActivity extends AppCompatActivity {
     User u;
-    private Button nextButton;
+    FirebaseAuth mAuth;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.onboarding_activity);
-        ViewPager2 viewPager = findViewById(R.id.viewpager);
-        ViewPagerAdapter adapter = new ViewPagerAdapter(this);
-        int type = userType(u);
-        adapter.setFragments(getFragmentsForUserType(type));
-        // for testing uncomment and make testusertype =1 for parent 2 for child
-        //3 for provider and comment out line 29 and 30 when using
-//        int testUserType = 3;
-//        adapter.setFragments(getFragmentsForUserType(testUserType));
-        viewPager.setAdapter(adapter);
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        FirebaseDatabase.getInstance().getReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child("parents").hasChild(user.getUid()) && !((boolean) snapshot.child("parents").child(user.getUid()).child("onboarded").getValue())) {
+                    u = new Parent(user.getEmail(), snapshot.child("parents").child(user.getUid()).child("password").toString());
+                }
+                else if (snapshot.child("providers").hasChild(user.getUid()) && !((boolean) snapshot.child("providers").child(user.getUid()).child("onboarded").getValue())) {
+                    u = new Provider(user.getEmail(), snapshot.child("providers").child(user.getUid()).child("password").toString());
+                }
+                else if (snapshot.child("children").hasChild(user.getUid()) && !((boolean) snapshot.child("children").child(user.getUid()).child("onboarded").getValue())) {
+                    u = new Child(snapshot.child("children").child(user.getUid()).child("username").toString(), snapshot.child("children").child(user.getUid()).child("password").toString());
+                }
+                else {
+                    Intent i = new Intent(OnboardingActivity.this, DashboardActivity.class);
+                    startActivity(i);
+                }
+                ViewPager2 viewPager = findViewById(R.id.viewpager);
+                ViewPagerAdapter adapter = new ViewPagerAdapter(OnboardingActivity.this);
+                int type = userType();
+                adapter.setFragments(getFragmentsForUserType(type));
+                viewPager.setAdapter(adapter);
+            }
 
-
-
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("testing123", error.getMessage());
+            }
+        });
     }
 
 
@@ -63,10 +85,7 @@ public class OnboardingActivity extends AppCompatActivity {
                 return Collections.emptyList();
         }
     }
-    public int userType(User u) {
-        if (u.onboarded) {
-            return 0;
-        }
+    public int userType() {
         if (u instanceof Parent) {
             return 1;
         }
@@ -80,6 +99,19 @@ public class OnboardingActivity extends AppCompatActivity {
     }
 
     public void completeOnboarding() {
-        u.onboarded=true;
+        u.setOnboarded(true);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (u instanceof Parent) {
+            reference.child("parents").child(fUser.getUid()).child("onboarded").setValue(true);
+        }
+        else if (u instanceof Provider) {
+            reference.child("providers").child(fUser.getUid()).child("onboarded").setValue(true);
+        }
+        else {
+            reference.child("children").child(fUser.getUid()).child("onboarded").setValue(true);
+        }
+        Intent i = new Intent(this, DashboardActivity.class);
+        startActivity(i);
     }
 }

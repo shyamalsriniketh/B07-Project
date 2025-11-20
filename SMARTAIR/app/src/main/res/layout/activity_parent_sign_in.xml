@@ -9,14 +9,16 @@
 
     <Button
         android:id="@+id/button4"
-        android:layout_width="66dp"
-        android:layout_height="38dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="#BA4040"
         android:backgroundTint="#921313"
         android:backgroundTintMode="screen"
-        android:onClick="go_back"
+        android:text="Back"
         android:textColorLink="#E91E63"
+        android:textSize="24sp"
         app:icon="@android:drawable/ic_media_rew"
+        app:iconSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.049"
@@ -25,43 +27,43 @@
         app:layout_constraintVertical_bias="0.018" />
 
     <EditText
-        android:id="@+id/ProviderTextEmailAddress"
+        android:id="@+id/ParentTextEmailAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Enter Email Address"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/ProviderTextTextPassword"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/ParentTextTextPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/button4"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.48000002" />
 
     <EditText
-        android:id="@+id/ProviderTextTextPassword"
+        android:id="@+id/ParentTextTextPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Enter Password"
         android:inputType="textPassword"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.412"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ProviderTextEmailAddress"
+        app:layout_constraintTop_toBottomOf="@+id/ParentTextEmailAddress"
         app:layout_constraintVertical_bias="0.119" />
 
     <Button
         android:id="@+id/button7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="save_button"
-        android:text="Save"
+        android:text="Register"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.445"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ProviderTextTextPassword"
-        app:layout_constraintVertical_bias="0.496" />
+        app:layout_constraintTop_toBottomOf="@+id/ParentTextTextPassword"
+        app:layout_constraintVertical_bias="0.495" />
 </androidx.constraintlayout.widget.ConstraintLayout>

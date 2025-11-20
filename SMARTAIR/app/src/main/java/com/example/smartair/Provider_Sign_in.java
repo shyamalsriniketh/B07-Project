@@ -1,5 +1,6 @@
 package com.example.smartair;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,9 +42,6 @@ public class Provider_Sign_in extends AppCompatActivity {
     private void save_button(){
         String email = emailfield.getText().toString();
         String password = passwordfield.getText().toString();
-        Provider provider = new Provider(email, password);
-        String uid = mAuth.getCurrentUser().getUid();
-        db.getReference("users").child("providers").child(uid).setValue(provider);
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
@@ -51,10 +49,13 @@ public class Provider_Sign_in extends AppCompatActivity {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
             if(task.isSuccessful()){
                 FirebaseUser user = mAuth.getCurrentUser();
-                Toast.makeText(this, "Account created " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                db.getReference().child("providers").child(user.getUid()).setValue(new Provider(email, password));
+                Toast.makeText(this, "Account created!", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(this, OnboardingActivity.class);
+                startActivity(i);
             }
             else {
-                Toast.makeText(this, "Sign up failed " +
+                Toast.makeText(this, "Sign up failed: " +
                         task.getException().getMessage(), Toast.LENGTH_LONG).show();
             }
         });
