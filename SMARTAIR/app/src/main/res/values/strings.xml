@@ -7,9 +7,9 @@
     <string name="click_to_register">Click to register</string>
     <string name="parentf1">parentf1</string>
     <string name="add_child">Add child</string>
-    <string name="manage_child">Manage children</string>
-    <string name="add_child_prompt">Want to create an account for your child?</string>
-    <string name="manage_child_prompt">Access your children\'s settings</string>
+    <string name="manage_child">View Children</string>
+    <string name="add_child_prompt">Create an account for your child</string>
+    <string name="manage_child_prompt">Access your children\'s accounts</string>
     <string name="child_signup_username">Enter Username</string>
     <string name="domain">\@smartairchildaccount.com</string>
     <string name="back">Back</string>
@@ -17,5 +17,7 @@
     <string name="enter_name">Enter Name (optional)</string>
     <string name="add_child_header">Creating an Account for your Child</string>
     <string name="select_child">Select child</string>
-    <string name="change_child_settings">Edit child\'s settings</string>
+    <string name="change_child_settings">Enter new value</string>
+    <string name="save">Save</string>
+    <string name="click_to_edit">Click on an item to edit its value!</string>
 </resources>

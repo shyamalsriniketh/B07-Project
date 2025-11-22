@@ -2,6 +2,7 @@ package com.example.smartair;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,8 +23,6 @@ import java.util.ArrayList;
 public class AddChildActivity extends AppCompatActivity {
     EditText usernameField;
     EditText passwordField;
-    EditText nameField;
-    EditText dobField;
     Button register;
     Button back;
     FirebaseAuth mAuth;
@@ -37,43 +36,35 @@ public class AddChildActivity extends AppCompatActivity {
         reference = FirebaseDatabase.getInstance().getReference();
         usernameField = findViewById(R.id.child_username);
         passwordField = findViewById(R.id.child_password);
-        nameField = findViewById(R.id.child_name);
-        dobField = findViewById(R.id.child_dob);
         register = findViewById(R.id.child_register_button);
         back = findViewById(R.id.add_child_back_button);
-        Toast.makeText(this, "Once you create your child's account, you'll have to log in again. Don't worry, you won't lose any data!", Toast.LENGTH_SHORT).show();
         register.setOnClickListener(v -> {
             String username = usernameField.getText().toString();
             String password = passwordField.getText().toString();
-            String name = nameField.getText().toString();
-            String dob = dobField.getText().toString();
             FirebaseUser curUser = mAuth.getCurrentUser();
             if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
             mAuth.createUserWithEmailAndPassword(username + DOMAIN, password).addOnCompleteListener(this, task -> {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     Child child = new Child(username, password);
-                    if (!name.isEmpty()) {
-                        child.setName(name);
-                    }
-                    if (!dob.isEmpty()) {
-                        child.setDob(dob);
-                    }
-                    reference.child("Children").child(username).setValue(child);
-                    reference.child("Parents").child(curUser.getEmail()).child("linkedChildren").addValueEventListener(new ValueEventListener() {
+                    reference.child("children").child(mAuth.getCurrentUser().getUid()).setValue(child);
+                    reference.child("parents").child(curUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            ArrayList<Child> childList;
-                            if (snapshot.getValue() == null) {
+                            ArrayList<String> childList;
+                            if (!snapshot.hasChild("linkedChildren")) {
                                 childList = new ArrayList<>();
                             }
                             else {
-                                childList = (ArrayList<Child>) snapshot.getValue();
+                                childList = (ArrayList<String>) snapshot.child("linkedChildren").getValue();
                             }
-                            childList.add(child);
-                            reference.child("Parents").child(curUser.getEmail()).child("linkedChildren").setValue(childList);
+                            childList.add(mAuth.getCurrentUser().getUid());
+                            reference.child("parents").child(curUser.getUid()).child("linkedChildren").setValue(childList);
+                            Toast.makeText(AddChildActivity.this, "Account created!", Toast.LENGTH_SHORT).show();
+                            mAuth.updateCurrentUser(curUser);
+                            back.performClick();
                         }
 
                         @Override
@@ -81,10 +72,6 @@ public class AddChildActivity extends AppCompatActivity {
                             Toast.makeText(AddChildActivity.this, "Error: couldn't link child account to parent.", Toast.LENGTH_LONG).show();
                         }
                     });
-                    Toast.makeText(this, "Account created!", Toast.LENGTH_SHORT).show();
-                    mAuth.signOut();
-                    Intent i = new Intent(this, Login.class);
-                    startActivity(i);
                 }
                 else {
                     Toast.makeText(this, "Sign up failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();

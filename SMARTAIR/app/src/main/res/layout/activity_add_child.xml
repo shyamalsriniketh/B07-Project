@@ -17,8 +17,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.563" />
+        app:layout_constraintTop_toBottomOf="@+id/child_password"
+        app:layout_constraintVertical_bias="0.164" />
 
     <EditText
         android:id="@+id/child_password"
@@ -56,35 +56,6 @@
         app:icon="@android:drawable/ic_media_rew"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/child_dob"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:ems="10"
-        android:hint="@string/enter_dob"
-        android:inputType="date"
-        android:textSize="23sp"
-        app:layout_constraintBottom_toTopOf="@+id/child_register_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.506"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/child_password"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <EditText
-        android:id="@+id/child_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/enter_name"
-        android:inputType="text"
-        android:textSize="23sp"
-        app:layout_constraintBottom_toTopOf="@+id/child_dob"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/child_password" />
 
     <TextView
         android:id="@+id/textView7"
