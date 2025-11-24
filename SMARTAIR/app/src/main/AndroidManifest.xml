@@ -20,6 +20,15 @@
             android:name=".ForgotPassword"
             android:exported="false" />
         <activity
+            android:name=".ViewChildActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddChildActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ManageChildrenActivity"
+            android:exported="false" />
+        <activity
             android:name=".DashboardActivity"
             android:exported="false" />
         <activity
