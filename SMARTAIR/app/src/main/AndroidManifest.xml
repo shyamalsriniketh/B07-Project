@@ -28,6 +28,12 @@
             android:name=".Login"
             android:exported="true" />
         <activity
+            android:name=".ParentToProviderInviteCodeActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".ProviderInviteCodeActivity"
+            android:exported="true"/>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
