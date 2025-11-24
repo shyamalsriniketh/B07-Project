@@ -30,16 +30,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome Parents!"
+            android:text="@string/welcome"
             android:textColor="#FF0000"
-            android:textSize="24sp" />
+            android:textSize="28sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Get started with parent features"
-            android:textSize="16sp" />
+            android:text="@string/swipe"
+            android:textSize="24sp" />
 
     </LinearLayout>
 
