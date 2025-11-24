@@ -14,6 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SMARTAIR">
         <activity
+            android:name=".SignOut"
+            android:exported="false" />
+        <activity
+            android:name=".ForgotPassword"
+            android:exported="false" />
+        <activity
             android:name=".DashboardActivity"
             android:exported="false" />
         <activity
