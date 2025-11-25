@@ -7,8 +7,8 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="350dp"
-        android:layout_height="225dp"
+        android:layout_width="367dp"
+        android:layout_height="224dp"
         android:layout_marginStart="61dp"
         android:layout_marginEnd="62dp"
         android:layout_marginBottom="137dp"
@@ -79,8 +79,8 @@
 
     <TextView
         android:id="@+id/textView11"
-        android:layout_width="363dp"
-        android:layout_height="185dp"
+        android:layout_width="369dp"
+        android:layout_height="181dp"
         android:text="@string/rescue_controller_definition"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
