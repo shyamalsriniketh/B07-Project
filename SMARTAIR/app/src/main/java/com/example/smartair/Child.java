@@ -9,6 +9,10 @@ public class Child extends User {
     String greenActionPlan;
     String yellowActionPlan;
     String redActionPlan;
+    String additionalNotes;
+    String inviteCodeProvider;
+    long providerCodeExpiry;
+    boolean dataSharedWithProvider;
 
     public Child() {
         super();
@@ -23,6 +27,10 @@ public class Child extends User {
         greenActionPlan = "";
         yellowActionPlan = "";
         redActionPlan = "";
+        additionalNotes = "";
+        inviteCodeProvider = null;
+        providerCodeExpiry = 0;
+        dataSharedWithProvider = false;
     }
 
     public String getName() {
@@ -57,6 +65,22 @@ public class Child extends User {
         return redActionPlan;
     }
 
+    public String getAdditionalNotes() {
+        return additionalNotes;
+    }
+
+    public String getInviteCodeProvider() {
+        return inviteCodeProvider;
+    }
+
+    public long getProviderCodeExpiry() {
+        return providerCodeExpiry;
+    }
+
+    public boolean getDataSharedWithProvider() {
+        return dataSharedWithProvider;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -88,4 +112,21 @@ public class Child extends User {
     public void setRedActionPlan(String redActionPlan) {
         this.redActionPlan = redActionPlan;
     }
+
+    public void setAdditionalNotes(String additionalNotes) {
+        this.additionalNotes = additionalNotes;
+    }
+
+    public void setInviteCodeProvider(String inviteCodeProvider) {
+        this.inviteCodeProvider = inviteCodeProvider;
+    }
+
+    public void setProviderCodeExpiry(long providerCodeExpiry) {
+        this.providerCodeExpiry = providerCodeExpiry;
+    }
+
+    public void setDataSharedWithProvider(boolean dataSharedWithProvider) {
+        this.dataSharedWithProvider = dataSharedWithProvider;
+    }
+
 }

@@ -20,4 +20,5 @@
     <string name="change_child_settings">Enter new value</string>
     <string name="save">Save</string>
     <string name="click_to_edit">Click on an item to edit its value!</string>
+    <string name="view_child_profile">View as child</string>
 </resources>

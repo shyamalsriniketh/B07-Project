@@ -3,6 +3,7 @@ package com.example.smartair;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -36,6 +37,7 @@ public class ViewChildActivity extends AppCompatActivity {
     ListView list;
     TextView dataName;
     EditText dataInput;
+    Button viewAsChild;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class ViewChildActivity extends AppCompatActivity {
         list = findViewById(R.id.data_list);
         dataName = findViewById(R.id.data_name);
         dataInput = findViewById(R.id.data_entry);
+        viewAsChild = findViewById(R.id.view_as_child);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -81,6 +84,11 @@ public class ViewChildActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+        viewAsChild.setOnClickListener(v -> {
+            //TODO: go to child dashboard, but with option of coming back
+            // maybe make hidden button on child dashboard that only becomes visible when entering through here
+
+        });
     }
 
     private void displayChildData(String username) {
@@ -96,11 +104,12 @@ public class ViewChildActivity extends AppCompatActivity {
                     }
                 }
                 for (String key : ((HashMap<String, Object>) snapshots.getValue()).keySet()) {
-                    if (!key.equals("onboarded") && !key.equals("id") && !key.equals("password")) {
+                    if (!key.equals("onboarded") && !key.equals("id") && !key.equals("password")
+                            && !key.equals("inviteCodeProvider") && !key.equals("providerCodeExpiry")
+                            && !key.equals("dataSharedWithProvider")) {
                         data.add(key + ": " + snapshots.child(key).getValue());
                     }
                 }
-                data.add("password: (hidden)");
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewChildActivity.this, android.R.layout.simple_list_item_1, data);
                 list.setAdapter(adapter);
                 list.setVisibility(View.VISIBLE);
@@ -111,12 +120,7 @@ public class ViewChildActivity extends AppCompatActivity {
                     dataName.setText("Editing " + key);
                     dataInput.setText("");
                     switch (key) {
-                        case "password":
-                            dataInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            break;
                         case "age":
-                            dataInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-                            break;
                         case "pb":
                             dataInput.setInputType(InputType.TYPE_CLASS_NUMBER);
                             break;
@@ -146,6 +150,11 @@ public class ViewChildActivity extends AppCompatActivity {
                             dataInput.setMaxLines(10);
                             dataName.setText("Editing action plan shown to child when zone is red");
                             break;
+                        case "additionalNotes":
+                            dataInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                            dataInput.setSingleLine(false);
+                            dataInput.setMaxLines(10);
+                            break;
                         default:
                             dataInput.setInputType(InputType.TYPE_CLASS_TEXT);
                             break;
@@ -155,37 +164,23 @@ public class ViewChildActivity extends AppCompatActivity {
                     dataName.setVisibility(View.VISIBLE);
                     dataInput.setVisibility(View.VISIBLE);
                     save.setVisibility(View.VISIBLE);
-                    String finalKey = key;
+                    viewAsChild.setVisibility(View.INVISIBLE);
                     save.setOnClickListener(v -> {
                         if (!dataInput.getText().toString().isEmpty()) {
-                            if (finalKey.equals("password")) {
-                                FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                                mAuth.signInWithEmailAndPassword(username + AddChildActivity.DOMAIN, finalSnapshots.child("password").getValue().toString()).addOnCompleteListener(task -> {
-                                    mAuth.getCurrentUser().updatePassword(dataInput.getText().toString()).addOnCompleteListener(task2 -> {
-                                        if (!(task2.isSuccessful())) {
-                                            Toast.makeText(ViewChildActivity.this, "Couldn't update password: " + task2.getException().getMessage(), Toast.LENGTH_LONG).show();
-                                            mAuth.updateCurrentUser(user);
-                                            return;
-                                        }
-                                        reference.child("children").child(finalSnapshots.getKey()).child(finalKey).setValue(dataInput.getText().toString());
-                                        mAuth.updateCurrentUser(user);
-                                    });
-                                });
-                            }
-                            else if (finalKey.equals("age") || finalKey.equals("pb") || finalKey.equals("highQualitySessionNum") || finalKey.equals("lowRescueMonthNum")) {
+                            if (key.equals("age") || key.equals("pb") || key.equals("highQualitySessionNum") || key.equals("lowRescueMonthNum")) {
                                 int input = Integer.parseInt(dataInput.getText().toString());
-                                if ((finalKey.equals("age") && input >= 6 && input <= 16)
-                                    || (finalKey.equals("pb") && input > 0)
-                                    || (finalKey.equals("highQualitySessionNum") && input >= 0)
-                                    || (finalKey.equals("lowRescueMonthNum") && input >= 0 && input <= 30)) {
-                                    reference.child("children").child(finalSnapshots.getKey()).child(finalKey).setValue(dataInput.getText().toString());
+                                if ((key.equals("age") && input >= 6 && input <= 16)
+                                    || (key.equals("pb") && input > 0)
+                                    || (key.equals("highQualitySessionNum") && input >= 0)
+                                    || (key.equals("lowRescueMonthNum") && input >= 0 && input <= 30)) {
+                                    reference.child("children").child(finalSnapshots.getKey()).child(key).setValue(dataInput.getText().toString());
                                 }
                                 else {
                                     Toast.makeText(ViewChildActivity.this, "Invalid input", Toast.LENGTH_LONG).show();
                                 }
                             }
                             else {
-                                reference.child("children").child(finalSnapshots.getKey()).child(finalKey).setValue(dataInput.getText().toString());
+                                reference.child("children").child(finalSnapshots.getKey()).child(key).setValue(dataInput.getText().toString());
                             }
                         }
                         dataName.setVisibility(View.INVISIBLE);
@@ -193,6 +188,7 @@ public class ViewChildActivity extends AppCompatActivity {
                         save.setVisibility(View.INVISIBLE);
                         list.setVisibility(View.VISIBLE);
                         spinner.setVisibility(View.VISIBLE);
+                        viewAsChild.setVisibility(View.VISIBLE);
                     });
                 });
             }

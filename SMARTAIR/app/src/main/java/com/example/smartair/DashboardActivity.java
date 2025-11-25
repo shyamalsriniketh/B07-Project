@@ -19,5 +19,10 @@ public class DashboardActivity extends AppCompatActivity {
             Intent i = new Intent(this, ManageChildrenActivity.class);
             startActivity(i);
         });
+        Button button2 = findViewById(R.id.button6);
+        button2.setOnClickListener(v -> {
+            Intent i = new Intent(this, SignOut.class);
+            startActivity(i);
+        });
     }
 }

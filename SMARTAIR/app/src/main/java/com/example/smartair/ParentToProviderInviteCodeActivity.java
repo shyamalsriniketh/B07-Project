@@ -1,4 +1,7 @@
-package com.example.smartair;
+//this class is doing the wrong stuff but a lot of the code can be reused
+//when parents go to share a child's data, the generating code stuff from here can be used
+
+/*package com.example.smartair;
 
 
 import android.os.Bundle;
@@ -34,39 +37,37 @@ public class ParentToProviderInviteCodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
-        GetParentData();
+        getParentData();
 
     }
-    public void StopSharing(){
+    public void stopSharing(){
         String currentUserId = mAuth.getCurrentUser().getUid();
         DatabaseReference parentRef = db.getReference("parents").child(currentUserId);
-        parentRef.child("DataSharedWithProvider").setValue(false);
-        parentRef.child("invitecodeProvider").setValue(null);
-        parent.DataSharedWithProvider=false;
-        parent.invitecodeProvider=null;
-
+        parentRef.child("dataSharedWithProvider").setValue(false);
+        parentRef.child("inviteCodeProvider").setValue(null);
+        parent.setDataSharedWithProvider(false);
+        parent.setInviteCodeProvider(null);
     }
 
-    public void GenerateCode(){
+    public void generateCode(){
         final long SEVEN_DAYS_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
-        String code= RandomCode();
-        long currtime=System.currentTimeMillis();
-        currentExpiry = currtime + SEVEN_DAYS_IN_MILLIS;
-        parent.updateInvite(code, currentExpiry);
-        UpdateCodeDatabase(code, currentExpiry);
-        currentInviteCode= code;
+        String code = randomCode();
+        long currTime = System.currentTimeMillis();
+        currentExpiry = currTime + SEVEN_DAYS_IN_MILLIS;
+        updateCodeDatabase(code, currentExpiry);
+        currentInviteCode = code;
     }
-    public String RandomCode() {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    public String randomCode() {
+        final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        final int CODE_LENGTH = 8;
         Random random = new Random();
         StringBuilder code = new StringBuilder();
-        for (int i = 0; i < 8; i++) {
-            code.append(characters.charAt(random.nextInt(characters.length())));
+        for (int i = 0; i < CODE_LENGTH; i++) {
+            code.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
         }
         return code.toString();
     }
-    public void GetParentData(){
-
+    public void getParentData(){
         String currentUserId = mAuth.getCurrentUser().getUid();
         DatabaseReference parentRef = db.getReference("parents").child(currentUserId);
 
@@ -75,32 +76,25 @@ public class ParentToProviderInviteCodeActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     parent = dataSnapshot.getValue(Parent.class);
-                    currentInviteCode = dataSnapshot.child("invitecodeProvider").getValue(String.class);
-                    currentExpiry = dataSnapshot.child("ProviderCodeExpiry").getValue(long.class);
-                    if (!parent.DataSharedWithProvider && parent!=null) {
+                    currentInviteCode = dataSnapshot.child("inviteCodeProvider").getValue(String.class);
+                    currentExpiry = dataSnapshot.child("providerCodeExpiry").getValue(long.class);
+                    if (!parent.getDataSharedWithProvider() && parent != null) {
                         setContentView(R.layout.generate_invite_code_provider_fragment);
                         Button generate = findViewById(R.id.button2);
                         display = findViewById(R.id.textView4);
-                        generate.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                GenerateCode();
-                                display.setText(currentInviteCode);
-                            }
-
+                        generate.setOnClickListener(v -> {
+                            generateCode();
+                            display.setText(currentInviteCode);
+                            display.setVisibility(View.VISIBLE);
                         });
                     }
                     else {
                         setContentView(R.layout.parent_stop_sharing_with_provider_fragment);
-                        Button stopsharing= findViewById(R.id.button5);
+                        Button stopSharing = findViewById(R.id.button5);
                         TextView textView = findViewById(R.id.textView6);
-                        stopsharing.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                StopSharing();
-                                textView.setText("Disabled data sharing");
-                            }
-
+                        stopSharing.setOnClickListener(v -> {
+                            stopSharing();
+                            textView.setText("Disabled data sharing");
                         });
                     }
 
@@ -114,10 +108,13 @@ public class ParentToProviderInviteCodeActivity extends AppCompatActivity {
             }
         });
     }
-    public void UpdateCodeDatabase(String code, long currentExpiry) {
+    public void updateCodeDatabase(String code, long currentExpiry) {
         String currentUserId = mAuth.getCurrentUser().getUid();
         DatabaseReference parentRef = db.getReference("parents").child(currentUserId);
-        parentRef.child("ProviderCodeExpiry").setValue(currentExpiry);
-        parentRef.child("invitecodeProvider").setValue(code);
+        parentRef.child("providerCodeExpiry").setValue(currentExpiry);
+        parentRef.child("inviteCodeProvider").setValue(code);
+        parent.setInviteCodeProvider(code);
+        parent.setProviderCodeExpiry(currentExpiry);
     }
 }
+*/
