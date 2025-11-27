@@ -23,6 +23,7 @@ public class OnboardingActivity extends AppCompatActivity {
     User u;
     FirebaseAuth mAuth;
     FirebaseUser user;
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,21 +31,24 @@ public class OnboardingActivity extends AppCompatActivity {
         setContentView(R.layout.onboarding_activity);
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
-        FirebaseDatabase.getInstance().getReference().addListenerForSingleValueEvent(new ValueEventListener() {
+        reference = FirebaseDatabase.getInstance().getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.child("parents").hasChild(user.getUid()) && !((boolean) snapshot.child("parents").child(user.getUid()).child("onboarded").getValue())) {
+                if (snapshot.child("parents").hasChild(user.getUid())) {
                     u = new Parent(user.getEmail(), snapshot.child("parents").child(user.getUid()).child("password").toString());
+                    u.setOnboarded(snapshot.child("parents").child(user.getUid()).child("onboarded").getValue(Boolean.class));
                 }
-                else if (snapshot.child("providers").hasChild(user.getUid()) && !((boolean) snapshot.child("providers").child(user.getUid()).child("onboarded").getValue())) {
+                else if (snapshot.child("providers").hasChild(user.getUid())) {
                     u = new Provider(user.getEmail(), snapshot.child("providers").child(user.getUid()).child("password").toString());
-                }
-                else if (snapshot.child("children").hasChild(user.getUid()) && !((boolean) snapshot.child("children").child(user.getUid()).child("onboarded").getValue())) {
-                    u = new Child(snapshot.child("children").child(user.getUid()).child("username").toString(), snapshot.child("children").child(user.getUid()).child("password").toString());
+                    u.setOnboarded(snapshot.child("providers").child(user.getUid()).child("onboarded").getValue(Boolean.class));
                 }
                 else {
-                    Intent i = new Intent(OnboardingActivity.this, DashboardActivity.class);
-                    startActivity(i);
+                    u = new Child(snapshot.child("children").child(user.getUid()).child("username").toString(), snapshot.child("children").child(user.getUid()).child("password").toString());
+                    u.setOnboarded(snapshot.child("children").child(user.getUid()).child("onboarded").getValue(Boolean.class));
+                }
+                if (u.getOnboarded()) {
+                    goToDashboard();
                 }
                 ViewPager2 viewPager = findViewById(R.id.viewpager);
                 ViewPagerAdapter adapter = new ViewPagerAdapter(OnboardingActivity.this);
@@ -54,9 +58,7 @@ public class OnboardingActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("testing123", error.getMessage());
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
 
@@ -111,7 +113,20 @@ public class OnboardingActivity extends AppCompatActivity {
         else {
             reference.child("children").child(fUser.getUid()).child("onboarded").setValue(true);
         }
-        Intent i = new Intent(this, DashboardActivity.class);
+        goToDashboard();
+    }
+
+    public void goToDashboard() {
+        Intent i;
+        if (u instanceof Parent) {
+            i = new Intent(this, ParentDashboardActivity.class);
+        }
+        else if (u instanceof Provider) {
+            i = new Intent(this, ProviderViewReports.class);
+        }
+        else {
+            i = new Intent(this, ChildDashboardActivity.class);
+        }
         startActivity(i);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.smartair;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -16,11 +17,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 public class ProviderInviteCodeActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
-    //String currentInviteCode;
-    //Parent parent;
-    //long currentExpiry;
     FirebaseDatabase db;
 
     @Override
@@ -38,101 +38,29 @@ public class ProviderInviteCodeActivity extends AppCompatActivity {
         });
 
     }
-    /*
-    public void loadProviderAccessibleParents() {
-        String providerId = mAuth.getCurrentUser().getUid();
-        DatabaseReference providerRef = db.getReference("providers")
-                .child(providerId)
-                .child("accessibleParents");
-
-        providerRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<String> parentIds = new ArrayList<>();
-                for (DataSnapshot parentSnapshot : dataSnapshot.getChildren()) {
-                    String parentId = parentSnapshot.getKey();
-                    parentIds.add(parentId);
-                }
-                checkSharingStatusAndLoadParents(parentIds);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("PROVIDER", "Error loading accessible parents: " + error.getMessage());
-            }
-        });
-
-    }
-    public void checkSharingStatusAndLoadParents(List<String> parentIds){
-        DatabaseReference parentsRef = db.getReference("parents");
-        List<String> stillSharingParentIds = new ArrayList<>();
-
-        for (String parentId : parentIds) {
-            parentsRef.child(parentId).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        Boolean isSharing = dataSnapshot.child("dataSharedWithProvider").getValue(Boolean.class);
-                        String currentCode = dataSnapshot.child("inviteCodeProvider").getValue(String.class);
-                        Long expiry = dataSnapshot.child("providerCodeExpiry").getValue(Long.class);
-                        boolean stillSharing = isSharing != null && isSharing && currentCode != null && expiry != null && System.currentTimeMillis() <= expiry;
-                        if (stillSharing) {
-                            stillSharingParentIds.add(parentId);
-//                            Parent parent = dataSnapshot.getValue(Parent.class);
-//                            displayParentData(parent);
-                        } else {
-                            removeParentFromProvider(parentId);
-                            Log.d("SHARING_STATUS", "Parent " + parentId + " stopped sharing");
-                        }
-                    } else {
-                        removeParentFromProvider(parentId);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e("FIREBASE", "Error: " + error.getMessage());
-                    Toast.makeText(ProviderInviteCodeActivity.this,
-                            "Failed to share data", Toast.LENGTH_SHORT).show();
-
-                }
-            });
-        }
-
-
-
-    }
-    public void removeParentFromProvider(String parentId){
-        String providerId = mAuth.getCurrentUser().getUid();
-        DatabaseReference providerRef = db.getReference("providers")
-                .child(providerId)
-                .child("accessibleParents")
-                .child(parentId);
-
-        providerRef.removeValue()
-                .addOnSuccessListener(aVoid -> {
-                    Log.d("REMOVE_PARENT", "Removed parent " + parentId + " - they stopped sharing");
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("REMOVE_PARENT", "Failed to remove parent: " + e.getMessage());
-                });
-    }
-    */
     public void validateCode(String code, long date) {
-        DatabaseReference childRef = db.getReference("children");
-        childRef.addValueEventListener(new ValueEventListener() {
+        DatabaseReference ref = db.getReference();
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    for (DataSnapshot childId : dataSnapshot.getChildren()) {
-                        Boolean isSharing = childId.child("dataSharedWithProvider").getValue(Boolean.class);
+                    for (DataSnapshot childId : dataSnapshot.child("children").getChildren()) {
                         String currentCode = childId.child("inviteCodeProvider").getValue(String.class);
                         Long expiry = childId.child("providerCodeExpiry").getValue(Long.class);
-                        boolean valid = isSharing != null && isSharing && currentCode != null && currentCode.equals(code) && expiry != null && date <= expiry;
+                        boolean valid = code.equals(currentCode) && date <= expiry;
                         if (valid) {
+                            HashMap<String, String> childrenAndCodes;
+                            if (!childId.hasChild("childrenAndCodes")) {
+                                childrenAndCodes = new HashMap<>();
+                            }
+                            else {
+                                childrenAndCodes = dataSnapshot.child("providers").child(mAuth.getCurrentUser().getUid()).child("childrenAndCodes").getValue(HashMap.class);
+                            }
+                            childrenAndCodes.put(code, childId.getKey());
+                            ref.child("providers").child(mAuth.getCurrentUser().getUid()).child("childrenAndCodes").setValue(childrenAndCodes);
                             Toast.makeText(ProviderInviteCodeActivity.this, "Code accepted! Sharing report.", Toast.LENGTH_LONG).show();
-                            //show report
-                            return;
+                            Intent i = new Intent(ProviderInviteCodeActivity.this, ProviderViewReports.class);
+                            startActivity(i);
                         }
                     }
                 }
@@ -146,50 +74,5 @@ public class ProviderInviteCodeActivity extends AppCompatActivity {
                         "Failed to validate code", Toast.LENGTH_SHORT).show();
             }
         });
-        /*
-        DatabaseReference parentRef = db.getReference("parents");
-
-        parentRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot parent_id : dataSnapshot.getChildren()) {
-                        parent = parent_id.getValue(Parent.class);
-                        currentInviteCode = parent_id.child("inviteCodeProvider").getValue(String.class);
-                        currentExpiry = parent_id.child("providerCodeExpiry").getValue(long.class);
-                        if (code != null && code.equals(currentInviteCode) && date <= currentExpiry) {
-                            Toast.makeText(ProviderInviteCodeActivity.this, " Code accepted! Sharing data...", Toast.LENGTH_SHORT).show();
-//                            shareDataWithProvider();
-                        } else {
-                            if (!code.equals(currentInviteCode)) {
-                                Toast.makeText(ProviderInviteCodeActivity.this,
-                                        "Invalid code", Toast.LENGTH_SHORT).show();
-                            } else if (date > currentExpiry) {
-                                Toast.makeText(ProviderInviteCodeActivity.this,
-                                        "Code has expired", Toast.LENGTH_SHORT).show();
-                            }
-                            }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("FIREBASE", "Error: " + databaseError.getMessage());
-                Toast.makeText(ProviderInviteCodeActivity.this,
-                        "Failed to load data", Toast.LENGTH_SHORT).show();
-            }
-        });
-         */
     }
-//    public void displayParentData(Parent parent) {
-//        if (parent != null) {
-//            //not sure how we will display it on the screen yet
-//        }
-//    }
-//    public void shareDataWithProvider(){
-//        //is empty because im not sure what the data is yet
-//    }
-
-
 }

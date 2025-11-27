@@ -38,6 +38,7 @@ public class ViewChildActivity extends AppCompatActivity {
     TextView dataName;
     EditText dataInput;
     Button viewAsChild;
+    Button shareWithProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class ViewChildActivity extends AppCompatActivity {
         dataName = findViewById(R.id.data_name);
         dataInput = findViewById(R.id.data_entry);
         viewAsChild = findViewById(R.id.view_as_child);
+        shareWithProvider = findViewById(R.id.share_with_provider);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -62,7 +64,7 @@ public class ViewChildActivity extends AppCompatActivity {
                     startActivity(i);
                 }
                 children_usernames = new ArrayList<>();
-                for (DataSnapshot snapshots : snapshot.child("parents").child(user.getUid()).child("linkedChildren").getChildren()) { //snapshots are each a uid
+                for (DataSnapshot snapshots : snapshot.child("parents").child(user.getUid()).child("linkedChildren").getChildren()) {
                     children_usernames.add(snapshot.child("children").child(snapshots.getValue().toString()).child("id").getValue().toString());
                 }
                 adapter = new ArrayAdapter<>(ViewChildActivity.this, android.R.layout.simple_spinner_item, children_usernames);
@@ -84,11 +86,6 @@ public class ViewChildActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
-        viewAsChild.setOnClickListener(v -> {
-            //TODO: go to child dashboard, but with option of coming back
-            // maybe make hidden button on child dashboard that only becomes visible when entering through here
-
-        });
     }
 
     private void displayChildData(String username) {
@@ -103,17 +100,27 @@ public class ViewChildActivity extends AppCompatActivity {
                         break;
                     }
                 }
+                DataSnapshot finalSnapshots = snapshots;
+                viewAsChild.setOnClickListener(v -> {
+                    FirebaseAuth.getInstance().signInWithEmailAndPassword(finalSnapshots.getKey() + AddChildActivity.DOMAIN, finalSnapshots.child("password").getValue(String.class));
+                    Intent i = new Intent(ViewChildActivity.this, ChildDashboardActivity.class);
+                    i.putExtra("PARENT_VIEW", user);
+                    startActivity(i);
+                });
+                shareWithProvider.setOnClickListener(v -> {
+                    Intent i = new Intent(ViewChildActivity.this, InvitingProviderActivity.class); //should go to screen where toggles are first
+                    i.putExtra("CHILD_UID", finalSnapshots.getKey());
+                    startActivity(i);
+                });
                 for (String key : ((HashMap<String, Object>) snapshots.getValue()).keySet()) {
                     if (!key.equals("onboarded") && !key.equals("id") && !key.equals("password")
-                            && !key.equals("inviteCodeProvider") && !key.equals("providerCodeExpiry")
-                            && !key.equals("dataSharedWithProvider")) {
+                            && !key.equals("inviteCodeProvider") && !key.equals("providerCodeExpiry")) {
                         data.add(key + ": " + snapshots.child(key).getValue());
                     }
                 }
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewChildActivity.this, android.R.layout.simple_list_item_1, data);
                 list.setAdapter(adapter);
                 list.setVisibility(View.VISIBLE);
-                DataSnapshot finalSnapshots = snapshots;
                 list.setOnItemClickListener((parent, view, position, id) -> {
                     String keyAndValue = parent.getItemAtPosition(position).toString();
                     String key = keyAndValue.split(":")[0];
@@ -165,6 +172,7 @@ public class ViewChildActivity extends AppCompatActivity {
                     dataInput.setVisibility(View.VISIBLE);
                     save.setVisibility(View.VISIBLE);
                     viewAsChild.setVisibility(View.INVISIBLE);
+                    shareWithProvider.setVisibility(View.INVISIBLE);
                     save.setOnClickListener(v -> {
                         if (!dataInput.getText().toString().isEmpty()) {
                             if (key.equals("age") || key.equals("pb") || key.equals("highQualitySessionNum") || key.equals("lowRescueMonthNum")) {
@@ -189,6 +197,7 @@ public class ViewChildActivity extends AppCompatActivity {
                         list.setVisibility(View.VISIBLE);
                         spinner.setVisibility(View.VISIBLE);
                         viewAsChild.setVisibility(View.VISIBLE);
+                        shareWithProvider.setVisibility(View.VISIBLE);
                     });
                 });
             }

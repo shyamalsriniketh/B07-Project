@@ -12,7 +12,6 @@ public class Child extends User {
     String additionalNotes;
     String inviteCodeProvider;
     long providerCodeExpiry;
-    boolean dataSharedWithProvider;
 
     public Child() {
         super();
@@ -30,7 +29,6 @@ public class Child extends User {
         additionalNotes = "";
         inviteCodeProvider = null;
         providerCodeExpiry = 0;
-        dataSharedWithProvider = false;
     }
 
     public String getName() {
@@ -77,10 +75,6 @@ public class Child extends User {
         return providerCodeExpiry;
     }
 
-    public boolean getDataSharedWithProvider() {
-        return dataSharedWithProvider;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -123,10 +117,6 @@ public class Child extends User {
 
     public void setProviderCodeExpiry(long providerCodeExpiry) {
         this.providerCodeExpiry = providerCodeExpiry;
-    }
-
-    public void setDataSharedWithProvider(boolean dataSharedWithProvider) {
-        this.dataSharedWithProvider = dataSharedWithProvider;
     }
 
 }
