@@ -29,7 +29,7 @@ public class SignOut extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         signOutBtn.setOnClickListener(v -> {
             auth.signOut();
-            startActivity(new Intent(this, Login.class));
+            startActivity(new Intent(this, LoginView.class));
             finish();
         });
     }

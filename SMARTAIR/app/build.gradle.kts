@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.viewpager2)
     testImplementation(libs.junit)
+    testImplementation("org.mockito:mockito-core:5.20.0")
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }

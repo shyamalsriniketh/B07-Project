@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         runChecks();
-        Intent i = new Intent(this, Login.class);
+        Intent i = new Intent(this, LoginView.class);
         startActivity(i);
     }
 
