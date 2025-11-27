@@ -33,10 +33,10 @@
     <string name="our_purpose">Our Purpose:</string>
     <string name="what_you_see">What you see:</string>
     <string name="rescue_vs_controller">Rescue vs Controller Medicine:</string>
-    <string name="rescue_controller_definition">Rescue inhaler: quick-relief medicine\nController medicine: daily medicine to make breathing easier</string>
+    <string name="rescue_controller_definition">Rescue inhaler: quick-relief medicine\n\nController medicine: daily medicine to make breathing easier</string>
     <string name="as_a_provider">As a provider, you can enter invite codes shared by parents to view reports of their children\'s data, containing only information that they have shared. By default, you won\'t see any data, and parents can toggle any data they want you to see. Parents can revoke this access at any time. A code is valid for 7 days, but once you enter a code, you will have access to the corresposnding report until parents revoke it. You can only read the data, you can\'t edit any of it.</string>
     <string name="parent_owns_child">Your parent owns your account. If you don\'t understand something, make sure to ask your parents!</string>
-    <string name="shared_data">Things that a parent can choose to share with you:\n- rescue logs\n- controller adherence summary\n- symptoms\n- triggers\n- peak-flow (PEF)\n- triage incidents\n- summary charts (visuals representing the other data).</string>
+    <string name="shared_data">- rescue logs\n- controller adherence summary\n- symptoms\n- triggers\n- peak-flow (PEF)\n- triage incidents\n- summary charts (visuals representing the other data).</string>
     <string name="continue_to_dashboard">Continue to dashboard</string>
     <string name="invite_title">Provider Sharing Controls:</string>
     <string name="sharing_controls">You will be able to generate an invite code, and your provider will have 7 days to enter this code to gain access to the information that you toggle on. You can revoke provider access or regenerate this code at any time. By default, all data will be kept private, so that only you and your child will be able to view it.</string>
@@ -102,4 +102,6 @@
     <string name="optional_enter_pef_below">(OPTIONAL) Enter your PEF below</string>
     <string name="child_controls">You can create an account for your child with a username and password at any time. You can also configure many settings for them, such as their name, age, personal best peak-flow (PB), thresholds to earn badges, and action plans for when your child is in the green, orange, or red zone (% peak-flow (PEF) of PB). All they will see is their own data.</string>
     <string name="as_a_child">- videos to help you take your medicine\n\n- enter how you\'re feeling\n\n- what medicine you have taken\n\n- help if you have trouble breathing</string>
+    <string name="things_shared_title">Things that a parent can choose to share with you:</string>
+
 </resources>
