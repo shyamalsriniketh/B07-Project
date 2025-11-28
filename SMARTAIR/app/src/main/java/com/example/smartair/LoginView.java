@@ -13,6 +13,7 @@ public class LoginView extends AppCompatActivity {
     EditText editTextEmailUsername, editTextPassword;
     Button buttonLogin;
     TextView textView;
+    TextView forgotPassword;
     LoginPresenter presenter;
 
     @Override
@@ -29,9 +30,11 @@ public class LoginView extends AppCompatActivity {
         editTextPassword = findViewById(R.id.enterPassword);
         buttonLogin = findViewById(R.id.button_Login);
         textView = findViewById(R.id.registerNow);
+        forgotPassword = findViewById(R.id.forgotPassword);
         presenter = new LoginPresenter(new LoginModel(), this);
         textView.setOnClickListener(view -> presenter.handleRoleSelectionClick());
         buttonLogin.setOnClickListener(view -> presenter.handleLoginClick(String.valueOf(editTextEmailUsername.getText()), String.valueOf(editTextPassword.getText())));
+        forgotPassword.setOnClickListener(view -> presenter.handleForgotPasswordClick());
     }
 
     public void showMessage(String message) {

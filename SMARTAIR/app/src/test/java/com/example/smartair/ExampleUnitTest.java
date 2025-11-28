@@ -79,4 +79,11 @@ public class ExampleUnitTest {
         presenter.handleLoginResult(false);
         verify(view).showMessage("Authentication failed.");
     }
+
+    @Test
+    public void testHandleForgotPasswordClick() {
+        LoginPresenter presenter = new LoginPresenter(model, view);
+        presenter.handleForgotPasswordClick();
+        verify(view).goToActivity(ForgotPassword.class);
+    }
 }

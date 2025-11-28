@@ -46,4 +46,8 @@ public class LoginPresenter {
             view.showMessage("Authentication failed.");
         }
     }
+
+    public void handleForgotPasswordClick() {
+        view.goToActivity(ForgotPassword.class);
+    }
 }
