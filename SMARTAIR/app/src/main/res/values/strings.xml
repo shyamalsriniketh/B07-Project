@@ -25,4 +25,6 @@
     <string name="regenerate_code">Regenerate code</string>
     <string name="revoke_code">Revoke code</string>
     <string name="share">Share with provider</string>
+    <string name="forgot_password">Forgot password? Click here</string>
+    <string name="send_reset_link">Send reset link</string>
 </resources>

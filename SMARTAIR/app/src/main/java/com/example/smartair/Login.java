@@ -17,6 +17,7 @@ public class Login extends AppCompatActivity {
     Button buttonLogin;
     FirebaseAuth mAuth;
     TextView textView;
+    TextView forgotPassword;
 
     @Override
     public void onStart() {
@@ -38,6 +39,7 @@ public class Login extends AppCompatActivity {
         editTextPassword = findViewById(R.id.enterPassword);
         buttonLogin = findViewById(R.id.button_Login);
         textView = findViewById(R.id.registerNow);
+        forgotPassword = findViewById(R.id.forgotPassword);
         textView.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), RoleSelectionActivity.class);
             startActivity(intent);
@@ -76,5 +78,9 @@ public class Login extends AppCompatActivity {
                     });
         });
 
+        forgotPassword.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), ForgotPassword.class);
+            startActivity(intent);
+        });
     }
 }
