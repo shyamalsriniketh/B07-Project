@@ -26,7 +26,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ViewChildActivity extends AppCompatActivity {
 
@@ -77,7 +76,7 @@ public class ViewChildActivity extends AppCompatActivity {
                 Toast.makeText(ViewChildActivity.this, "Error: couldn't display children", Toast.LENGTH_LONG).show();
             }
         });
-        Toast.makeText(this, "Click on an item to edit its value!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Click on an item to edit its value! Scroll to see more", Toast.LENGTH_LONG).show();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -100,6 +99,16 @@ public class ViewChildActivity extends AppCompatActivity {
                         break;
                     }
                 }
+                for (DataSnapshot attributes : snapshots.getChildren()) {
+                    String key = attributes.getKey();
+                    if (!key.equals("onboarded") && !key.equals("id") && !key.equals("password")
+                            && !key.equals("inviteCodeProvider") && !key.equals("providerCodeExpiry")) {
+                        data.add(key + ": " + snapshots.child(key).getValue(Object.class));
+                    }
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewChildActivity.this, android.R.layout.simple_list_item_1, data);
+                list.setAdapter(adapter);
+                list.setVisibility(View.VISIBLE);
                 DataSnapshot finalSnapshots = snapshots;
                 viewAsChild.setOnClickListener(v -> {
                     FirebaseAuth.getInstance().signInWithEmailAndPassword(finalSnapshots.getKey() + AddChildActivity.DOMAIN, finalSnapshots.child("password").getValue(String.class));
@@ -112,15 +121,6 @@ public class ViewChildActivity extends AppCompatActivity {
                     i.putExtra("CHILD_UID", finalSnapshots.getKey());
                     startActivity(i);
                 });
-                for (String key : ((HashMap<String, Object>) snapshots.getValue()).keySet()) {
-                    if (!key.equals("onboarded") && !key.equals("id") && !key.equals("password")
-                            && !key.equals("inviteCodeProvider") && !key.equals("providerCodeExpiry")) {
-                        data.add(key + ": " + snapshots.child(key).getValue());
-                    }
-                }
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewChildActivity.this, android.R.layout.simple_list_item_1, data);
-                list.setAdapter(adapter);
-                list.setVisibility(View.VISIBLE);
                 list.setOnItemClickListener((parent, view, position, id) -> {
                     String keyAndValue = parent.getItemAtPosition(position).toString();
                     String key = keyAndValue.split(":")[0];
@@ -162,6 +162,18 @@ public class ViewChildActivity extends AppCompatActivity {
                             dataInput.setSingleLine(false);
                             dataInput.setMaxLines(10);
                             break;
+                        case "controllerToday":
+                            dataInput.setInputType(InputType.TYPE_CLASS_TEXT);
+                            dataName.setText("Editing whether child should take a controller dose today (true or false)");
+                            break;
+                        case "rescueLeft":
+                            dataInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+                            dataName.setText("Editing percentage of rescue medicine left in inventory");
+                            break;
+                        case "controllerLeft":
+                            dataInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+                            dataName.setText("Editing percentage of controller medicine left in inventory");
+                            break;
                         default:
                             dataInput.setInputType(InputType.TYPE_CLASS_TEXT);
                             break;
@@ -175,20 +187,44 @@ public class ViewChildActivity extends AppCompatActivity {
                     shareWithProvider.setVisibility(View.INVISIBLE);
                     save.setOnClickListener(v -> {
                         if (!dataInput.getText().toString().isEmpty()) {
-                            if (key.equals("age") || key.equals("pb") || key.equals("highQualitySessionNum") || key.equals("lowRescueMonthNum")) {
-                                int input = Integer.parseInt(dataInput.getText().toString());
-                                if ((key.equals("age") && input >= 6 && input <= 16)
-                                    || (key.equals("pb") && input > 0)
-                                    || (key.equals("highQualitySessionNum") && input >= 0)
-                                    || (key.equals("lowRescueMonthNum") && input >= 0 && input <= 30)) {
+                            switch (key) {
+                                case "age":
+                                case "pb":
+                                case "highQualitySessionNum":
+                                case "lowRescueMonthNum":
+                                    int number = Integer.parseInt(dataInput.getText().toString());
+                                    if ((key.equals("age") && number >= 6 && number <= 16)
+                                            || (key.equals("pb") && number > 0)
+                                            || (key.equals("highQualitySessionNum") && number >= 0)
+                                            || (key.equals("lowRescueMonthNum") && number >= 0 && number <= 30)) {
+                                        reference.child("children").child(finalSnapshots.getKey()).child(key).setValue(number);
+                                    }
+                                    else {
+                                        Toast.makeText(ViewChildActivity.this, "Invalid input", Toast.LENGTH_LONG).show();
+                                    }
+                                    break;
+                                case "rescueLeft":
+                                case "controllerLeft":
+                                    double percent = Double.parseDouble(dataInput.getText().toString());
+                                    if (percent >= 0 && percent <= 100) {
+                                        reference.child("children").child(finalSnapshots.getKey()).child(key).setValue(percent);
+                                    }
+                                    else {
+                                        Toast.makeText(ViewChildActivity.this, "Invalid input", Toast.LENGTH_LONG).show();
+                                    }
+                                    break;
+                                case "controllerToday":
+                                    String input = dataInput.getText().toString().toLowerCase();
+                                    if (input.equals("true") || input.equals("false")) {
+                                        reference.child("children").child(finalSnapshots.getKey()).child(key).setValue(input.equals("true"));
+                                    }
+                                    else {
+                                        Toast.makeText(ViewChildActivity.this, "Invalid input", Toast.LENGTH_LONG).show();
+                                    }
+                                    break;
+                                default:
                                     reference.child("children").child(finalSnapshots.getKey()).child(key).setValue(dataInput.getText().toString());
-                                }
-                                else {
-                                    Toast.makeText(ViewChildActivity.this, "Invalid input", Toast.LENGTH_LONG).show();
-                                }
-                            }
-                            else {
-                                reference.child("children").child(finalSnapshots.getKey()).child(key).setValue(dataInput.getText().toString());
+                                    break;
                             }
                         }
                         dataName.setVisibility(View.INVISIBLE);

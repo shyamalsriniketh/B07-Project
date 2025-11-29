@@ -40,12 +40,13 @@ public class InvitingProviderActivity extends AppCompatActivity {
         displayCode = findViewById(R.id.display_code);
         Intent i = getIntent(); //intent should be created with extra String for the selected child's username
         childUid = i.getStringExtra("CHILD_UID");
+        Log.d("testing123", childUid);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 child = snapshot.child("children").child(childUid).getValue(Child.class);
                 title.setText("Sharing " + child.getId() + "'s data:");
-                if (child.providerCodeExpiry >= System.currentTimeMillis()) {
+                if (child.getProviderCodeExpiry() >= System.currentTimeMillis()) {
                     generate.setVisibility(View.INVISIBLE);
                     displayCode.setText("Current code: " + child.getInviteCodeProvider());
                     displayCode.setVisibility(View.VISIBLE);

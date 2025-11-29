@@ -2,16 +2,19 @@ package com.example.smartair;
 
 public class Child extends User {
     String name;
-    String age;
-    String pb;
-    String highQualitySessionNum;
-    String lowRescueMonthNum;
+    int age;
+    int pb;
+    int highQualitySessionNum;
+    int lowRescueMonthNum;
     String greenActionPlan;
     String yellowActionPlan;
     String redActionPlan;
     String additionalNotes;
     String inviteCodeProvider;
     long providerCodeExpiry;
+    boolean controllerToday;
+    double rescueLeft;
+    double controllerLeft;
 
     public Child() {
         super();
@@ -19,35 +22,38 @@ public class Child extends User {
     public Child(String username, String password) {
         super(username, password);
         name = "";
-        age = "";
-        pb = "";
-        highQualitySessionNum = "";
-        lowRescueMonthNum = "";
+        age = 0;
+        pb = 0;
+        highQualitySessionNum = 0;
+        lowRescueMonthNum = 0;
         greenActionPlan = "";
         yellowActionPlan = "";
         redActionPlan = "";
         additionalNotes = "";
         inviteCodeProvider = null;
         providerCodeExpiry = 0;
+        controllerToday = true;
+        rescueLeft = 100;
+        controllerLeft = 100;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getAge() {
+    public int getAge() {
         return age;
     }
 
-    public String getPb() {
+    public int getPb() {
         return pb;
     }
 
-    public String getHighQualitySessionNum() {
+    public int getHighQualitySessionNum() {
         return highQualitySessionNum;
     }
 
-    public String getLowRescueMonthNum() {
+    public int getLowRescueMonthNum() {
         return lowRescueMonthNum;
     }
 
@@ -75,23 +81,35 @@ public class Child extends User {
         return providerCodeExpiry;
     }
 
+    public boolean getControllerToday() {
+        return controllerToday;
+    }
+
+    public double getRescueLeft() {
+        return rescueLeft;
+    }
+
+    public double getControllerLeft() {
+        return controllerLeft;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setAge(String age) {
+    public void setAge(int age) {
         this.age = age;
     }
 
-    public void setPb(String pb) {
+    public void setPb(int pb) {
         this.pb = pb;
     }
 
-    public void setHighQualitySessionNum(String highQualitySessionNum) {
+    public void setHighQualitySessionNum(int highQualitySessionNum) {
         this.highQualitySessionNum = highQualitySessionNum;
     }
 
-    public void setLowRescueMonthNum(String lowRescueMonthNum) {
+    public void setLowRescueMonthNum(int lowRescueMonthNum) {
         this.lowRescueMonthNum = lowRescueMonthNum;
     }
 
@@ -119,4 +137,15 @@ public class Child extends User {
         this.providerCodeExpiry = providerCodeExpiry;
     }
 
+    public void setControllerToday(boolean controllerToday) {
+        this.controllerToday = controllerToday;
+    }
+
+    public void setRescueLeft(double rescueLeft) {
+        this.rescueLeft = rescueLeft;
+    }
+
+    public void setControllerLeft(double controllerLeft) {
+        this.controllerLeft = controllerLeft;
+    }
 }
