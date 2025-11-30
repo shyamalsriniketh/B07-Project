@@ -41,6 +41,7 @@
     <string name="invite_title">Provider Sharing Controls:</string>
     <string name="sharing_controls">You will be able to generate an invite code, and your provider will have 7 days to enter this code to gain access to the information that you toggle on. You can revoke provider access or regenerate this code at any time. By default, all data will be kept private, so that only you and your child will be able to view it.</string>
     <string name="managing_title">Managing Children Accounts:</string>
+    <string name="child_controls">You can create an account for your child with a username and password at any time. You should set multiple settings for them, such as their PB and zone-based action plans. Additionally, on every day, you should set whether they should take a controller dose or not. All of these, and more optional settings such as name, age, thresholds to earn badges, and inventory levels, can be found by navigating to Manage Children -> View Children.</string>
     <string name="forgot_password">Forgot password? Click here</string>
     <string name="send_reset_link">Send reset link</string>
     <string name="input">Input</string>
@@ -103,5 +104,4 @@
     <string name="child_controls">You can create an account for your child with a username and password at any time. You can also configure many settings for them, such as their name, age, personal best peak-flow (PB), thresholds to earn badges, and action plans for when your child is in the green, orange, or red zone (% peak-flow (PEF) of PB). All they will see is their own data.</string>
     <string name="as_a_child">- videos to help you take your medicine\n\n- enter how you\'re feeling\n\n- what medicine you have taken\n\n- help if you have trouble breathing</string>
     <string name="things_shared_title">Things that a parent can choose to share with you:</string>
-
 </resources>
