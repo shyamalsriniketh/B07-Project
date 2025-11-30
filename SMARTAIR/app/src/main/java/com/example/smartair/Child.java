@@ -15,6 +15,10 @@ public class Child extends User {
     boolean controllerToday;
     double rescueLeft;
     double controllerLeft;
+    String rescuePurchaseDate;
+    String rescueExpiryDate;
+    String controllerPurchaseDate;
+    String controllerExpiryDate;
 
     public Child() {
         super();
@@ -35,6 +39,10 @@ public class Child extends User {
         controllerToday = true;
         rescueLeft = 100;
         controllerLeft = 100;
+        rescuePurchaseDate = "";
+        rescueExpiryDate = "";
+        controllerPurchaseDate = "";
+        controllerExpiryDate = "";
     }
 
     public String getName() {
@@ -93,6 +101,22 @@ public class Child extends User {
         return controllerLeft;
     }
 
+    public String getRescuePurchaseDate() {
+        return rescuePurchaseDate;
+    }
+
+    public String getRescueExpiryDate() {
+        return rescueExpiryDate;
+    }
+
+    public String getControllerPurchaseDate() {
+        return controllerPurchaseDate;
+    }
+
+    public String getControllerExpiryDate() {
+        return controllerExpiryDate;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -147,5 +171,21 @@ public class Child extends User {
 
     public void setControllerLeft(double controllerLeft) {
         this.controllerLeft = controllerLeft;
+    }
+
+    public void setRescuePurchaseDate(String rescuePurchaseDate) {
+        this.rescuePurchaseDate = rescuePurchaseDate;
+    }
+
+    public void setRescueExpiryDate(String rescueExpiryDate) {
+        this.rescueExpiryDate = rescueExpiryDate;
+    }
+
+    public void setControllerPurchaseDate(String controllerPurchaseDate) {
+        this.controllerPurchaseDate = controllerPurchaseDate;
+    }
+
+    public void setControllerExpiryDate(String controllerExpiryDate) {
+        this.controllerExpiryDate = controllerExpiryDate;
     }
 }

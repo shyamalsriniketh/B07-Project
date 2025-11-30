@@ -24,7 +24,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ViewChildActivity extends AppCompatActivity {
 
@@ -75,10 +79,10 @@ public class ViewChildActivity extends AppCompatActivity {
                 Toast.makeText(ViewChildActivity.this, "Error: couldn't display children", Toast.LENGTH_LONG).show();
             }
         });
-        Toast.makeText(this, "Click on an item to edit its value! Scroll to see more", Toast.LENGTH_LONG).show();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(ViewChildActivity.this, "Click on an item to edit its value! Scroll to see more", Toast.LENGTH_LONG).show();
                 displayChildData(parent.getItemAtPosition(position).toString());
             }
             @Override
@@ -173,6 +177,22 @@ public class ViewChildActivity extends AppCompatActivity {
                             dataInput.setInputType(InputType.TYPE_CLASS_NUMBER);
                             dataName.setText("Editing percentage of controller medicine left in inventory");
                             break;
+                        case "rescuePurchaseDate":
+                            dataInput.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
+                            dataName.setText("Editing date of last rescue medicine purchase (MM-DD-YYYY)");
+                            break;
+                        case "rescueExpiryDate":
+                            dataInput.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
+                            dataName.setText("Editing expiry date of last rescue medicine purchase (MM-DD-YYYY)");
+                            break;
+                        case "controllerPurchaseDate":
+                            dataInput.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
+                            dataName.setText("Editing date of last controller medicine purchase (MM-DD-YYYY)");
+                            break;
+                        case "controllerExpiryDate":
+                            dataInput.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
+                            dataName.setText("Editing expiry date of last controller medicine purchase (MM-DD-YYYY)");
+                            break;
                         default:
                             dataInput.setInputType(InputType.TYPE_CLASS_TEXT);
                             break;
@@ -221,6 +241,26 @@ public class ViewChildActivity extends AppCompatActivity {
                                         Toast.makeText(ViewChildActivity.this, "Invalid input", Toast.LENGTH_LONG).show();
                                     }
                                     break;
+                                case "rescuePurchaseDate":
+                                case "controllerPurchaseDate":
+                                    String pDate = dataInput.getText().toString();
+                                    if (isValidPurchase(pDate)) {
+                                        reference.child("children").child(finalSnapshots.getKey()).child(key).setValue(pDate);
+                                    }
+                                    else {
+                                        Toast.makeText(ViewChildActivity.this, "Invalid input", Toast.LENGTH_LONG).show();
+                                    }
+                                    break;
+                                case "rescueExpiryDate":
+                                case "controllerExpiryDate":
+                                    String eDate = dataInput.getText().toString();
+                                    if (isValidExpiry(eDate)) {
+                                        reference.child("children").child(finalSnapshots.getKey()).child(key).setValue(eDate);
+                                    }
+                                    else {
+                                        Toast.makeText(ViewChildActivity.this, "Invalid input", Toast.LENGTH_LONG).show();
+                                    }
+                                    break;
                                 default:
                                     reference.child("children").child(finalSnapshots.getKey()).child(key).setValue(dataInput.getText().toString());
                                     break;
@@ -240,5 +280,31 @@ public class ViewChildActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
+    }
+
+    private static boolean isValidPurchase(String date) {
+        DateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+        sdf.setLenient(false);
+        try {
+            Date enteredDate = sdf.parse(date);
+            Date curDate = new Date();
+            return (enteredDate.before(curDate) || enteredDate.equals(curDate));
+        }
+        catch (ParseException e) {
+            return false;
+        }
+    }
+
+    private static boolean isValidExpiry(String date) {
+        DateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+        sdf.setLenient(false);
+        try {
+            Date enteredDate = sdf.parse(date);
+            Date curDate = new Date();
+            return curDate.before(enteredDate);
+        }
+        catch (ParseException e) {
+            return false;
+        }
     }
 }
