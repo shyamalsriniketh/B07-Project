@@ -14,6 +14,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SMARTAIR">
         <activity
+            android:name=".Logging_PostCheck"
+            android:exported="false" />
+        <activity
+            android:name=".Technique_helper"
+            android:exported="false" />
+        <activity
+            android:name=".Pre_check"
+            android:exported="false" />
+        <activity
+            android:name=".Medication_Selection"
+            android:exported="false" />
+        <activity
+            android:name=".Daily_Checkin_Triggers"
+            android:exported="false" />
+        <activity
+            android:name=".Daily_Checkin"
+            android:exported="false" />
+        <activity
+            android:name=".Child_Input"
+            android:exported="false" />
+        <activity
             android:name=".ChildDashboardActivity"
             android:exported="false" />
         <activity

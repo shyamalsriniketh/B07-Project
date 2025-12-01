@@ -12,10 +12,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,7 +21,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -114,10 +111,14 @@ public class ViewChildActivity extends AppCompatActivity {
                 list.setVisibility(View.VISIBLE);
                 DataSnapshot finalSnapshots = snapshots;
                 viewAsChild.setOnClickListener(v -> {
-                    FirebaseAuth.getInstance().signInWithEmailAndPassword(finalSnapshots.getKey() + AddChildActivity.DOMAIN, finalSnapshots.child("password").getValue(String.class));
-                    Intent i = new Intent(ViewChildActivity.this, ChildDashboardActivity.class);
-                    i.putExtra("PARENT_VIEW", user);
-                    startActivity(i);
+                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                    mAuth.signInWithEmailAndPassword(finalSnapshots.child("id").getValue(String.class) + AddChildActivity.DOMAIN, finalSnapshots.child("password").getValue(String.class)).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Intent i = new Intent(ViewChildActivity.this, ChildDashboardActivity.class);
+                            i.putExtra("PARENT_VIEW", user);
+                            startActivity(i);
+                        }
+                    });
                 });
                 shareWithProvider.setOnClickListener(v -> {
                     Intent i = new Intent(ViewChildActivity.this, InvitingProviderActivity.class); //should go to screen where toggles are first

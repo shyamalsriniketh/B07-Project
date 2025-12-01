@@ -2,6 +2,7 @@ package com.example.smartair;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 
@@ -15,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ChildDashboardActivity extends AppCompatActivity {
     Button back;
+    Button input;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,14 @@ public class ChildDashboardActivity extends AppCompatActivity {
         button.setOnClickListener(v -> {
             Intent j = new Intent(this, SignOut.class);
             startActivity(j);
+        });
+        input = findViewById(R.id.button12);
+        input.setOnClickListener(v -> {
+            Intent k = new Intent(this, Child_Input.class);
+            if (i.hasExtra("PARENT_VIEW")) {
+                k.putExtra("PARENT_VIEW", (Parcelable) i.getParcelableExtra("PARENT_VIEW"));
+            }
+            startActivity(k);
         });
     }
 }
