@@ -14,7 +14,55 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SMARTAIR">
         <activity
-            android:name=".DashboardActivity"
+            android:name=".PEF"
+            android:exported="false" />
+        <activity
+            android:name=".Logging_PostCheck"
+            android:exported="false" />
+        <activity
+            android:name=".Technique_helper"
+            android:exported="false" />
+        <activity
+            android:name=".Pre_check"
+            android:exported="false" />
+        <activity
+            android:name=".Medication_Selection"
+            android:exported="false" />
+        <activity
+            android:name=".Daily_Checkin_Triggers"
+            android:exported="false" />
+        <activity
+            android:name=".Daily_Checkin"
+            android:exported="false" />
+        <activity
+            android:name=".Child_Input"
+            android:exported="false" />
+        <activity
+            android:name=".ChildDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProviderViewReports"
+            android:exported="false" />
+        <activity
+            android:name=".InvitingProviderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SignOut"
+            android:exported="false" />
+        <activity
+            android:name=".ForgotPassword"
+            android:exported="false" />
+        <activity
+            android:name=".ViewChildActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddChildActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ManageChildrenActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ParentDashboardActivity"
             android:exported="false" />
         <activity
             android:name=".Provider_Sign_in"
@@ -26,6 +74,9 @@
             android:exported="false" />
         <activity
             android:name=".Login"
+            android:exported="true" />
+        <activity
+            android:name=".ProviderInviteCodeActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"

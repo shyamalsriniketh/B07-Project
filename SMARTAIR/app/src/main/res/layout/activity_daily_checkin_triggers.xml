@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Daily_Checkin_Triggers">
+
+
+    <CheckBox
+        android:id="@+id/daily_Checkin_Trigger_None_Checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/none"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/daily_Checkin_Trigger_Illness_Checkbox" />
+
+    <CheckBox
+        android:id="@+id/daily_Checkin_Trigger_Perfumes_Checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/perfumes"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/daily_Checkin_Trigger_Illness_Checkbox"
+        app:layout_constraintTop_toBottomOf="@+id/daily_Checkin_Trigger_Smoke_Checkbox" />
+
+
+    <CheckBox
+        android:id="@+id/daily_Checkin_Trigger_DustPets_Checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dust_pets"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/daily_Checkin_Trigger_Smoke_Checkbox"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Daily_Checkin_Trigger_Exercise_Checkbox" />
+
+
+    <TextView
+        android:id="@+id/Daily_Checkin_Triggers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:text="@string/today_s_triggers"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/daily_Checkin_Triggers_Back_Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/back"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/Daily_Checkin_Triggers_Finish_Button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/daily_Checkin_Trigger_None_Checkbox" />
+
+
+    <Button
+        android:id="@+id/Daily_Checkin_Triggers_Finish_Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/finish"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/daily_Checkin_Triggers_Back_Button"
+        app:layout_constraintTop_toBottomOf="@+id/daily_Checkin_Trigger_None_Checkbox" />
+
+
+    <CheckBox
+        android:id="@+id/Daily_Checkin_Trigger_Exercise_Checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40sp"
+        android:text="@string/exercise"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/daily_Checkin_Trigger_Cold_Air_Checkbox"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Daily_Checkin_Triggers" />
+
+
+    <CheckBox
+        android:id="@+id/daily_Checkin_Trigger_Cold_Air_Checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40sp"
+        android:text="@string/cold_air"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/Daily_Checkin_Trigger_Exercise_Checkbox"
+        app:layout_constraintTop_toBottomOf="@+id/Daily_Checkin_Triggers" />
+
+    <CheckBox
+        android:id="@+id/daily_Checkin_Trigger_Illness_Checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/illness"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/daily_Checkin_Trigger_Perfumes_Checkbox"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/daily_Checkin_Trigger_DustPets_Checkbox" />
+
+
+    <CheckBox
+        android:id="@+id/daily_Checkin_Trigger_Smoke_Checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/smoke"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/daily_Checkin_Trigger_DustPets_Checkbox"
+        app:layout_constraintTop_toBottomOf="@+id/daily_Checkin_Trigger_Cold_Air_Checkbox" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
