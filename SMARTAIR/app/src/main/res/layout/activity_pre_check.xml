@@ -8,6 +8,32 @@
     tools:context=".Pre_check">
 
 
+    <EditText
+        android:id="@+id/Pre_check_PEF_entry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:ems="10"
+        android:hint="@string/enter_pef"
+        android:inputType="text"
+        android:textSize="24sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Pre_check_PEF_title" />
+
+    <TextView
+        android:id="@+id/Pre_check_PEF_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40sp"
+        android:text="@string/optional_enter_pef_below"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Pre_check_Breath_Rating" />
+
     <TextView
         android:id="@+id/Logging_Interface_Text2"
         android:layout_width="wrap_content"
@@ -38,7 +64,7 @@
         android:id="@+id/Pre_check_Breath_Rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40sp"
+        android:layout_marginTop="20sp"
         android:ems="10"
         android:hint="@string/short_breath_rating"
         android:inputType="text"
@@ -58,7 +84,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/Pre_Check_Back_Button"
-        app:layout_constraintTop_toBottomOf="@+id/Pre_check_Breath_Rating" />
+        app:layout_constraintTop_toBottomOf="@+id/Pre_check_PEF_entry" />
 
     <Button
         android:id="@+id/Pre_Check_Back_Button"
@@ -70,7 +96,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/Pre_Check_Next_Button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Pre_check_Breath_Rating" />
+        app:layout_constraintTop_toBottomOf="@+id/Pre_check_PEF_entry" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

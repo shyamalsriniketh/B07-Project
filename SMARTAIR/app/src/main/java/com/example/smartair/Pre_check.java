@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Pre_check extends AppCompatActivity {
 
     Button backButton, nextButton;
-    EditText breathRating;
+    EditText breathRating, pef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +21,7 @@ public class Pre_check extends AppCompatActivity {
         backButton = findViewById(R.id.Pre_Check_Back_Button);
         nextButton = findViewById(R.id.Pre_Check_Next_Button);
         breathRating = findViewById(R.id.Pre_check_Breath_Rating);
+        pef = findViewById(R.id.Pre_check_PEF_entry);
         Intent i = getIntent();
 
         backButton.setOnClickListener(v -> {
@@ -42,6 +43,10 @@ public class Pre_check extends AppCompatActivity {
             Intent intent = new Intent(Pre_check.this, Technique_helper.class);
             intent.putExtra("breathRating", rating);
             intent.putExtra("medicineType", getIntent().getStringExtra("medicineType"));
+            if(!pef.getText().toString().isEmpty()) {
+                intent.putExtra("prePEF", Integer.parseInt(pef.getText().toString()));
+                intent.putExtra("preTimestamp", System.currentTimeMillis());
+            }
             if (i.hasExtra("PARENT_VIEW")) {
                 intent.putExtra("PARENT_VIEW", (Parcelable) i.getParcelableExtra("PARENT_VIEW"));
             }

@@ -21,7 +21,7 @@ public class Logging_PostCheck extends AppCompatActivity {
     Button backButton, nextButton;
     CheckBox betterCheckbox, sameCheckbox, worseCheckbox;
     DatabaseReference reference;
-    EditText postCheckBreathRate, puffs;
+    EditText postCheckBreathRate, puffs, pef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,7 @@ public class Logging_PostCheck extends AppCompatActivity {
         puffs = findViewById(R.id.Log_Number_Input);
         backButton = findViewById(R.id.logging_Post_Check_Back_Button);
         nextButton = findViewById(R.id.Logging_Post_Check_Finish_Button);
+        pef = findViewById(R.id.Post_check_PEF_entry);
         String status1 = "Better";
         String status2 = "Same";
         String status3 = "Worse";
@@ -97,6 +98,8 @@ public class Logging_PostCheck extends AppCompatActivity {
                 return;
             }
 
+            //TODO: If >=3 rescues in last hour, send alert
+
             long timestamp = System.currentTimeMillis();
             String status = "";
 
@@ -117,6 +120,15 @@ public class Logging_PostCheck extends AppCompatActivity {
             reference.child(String.valueOf(timestamp)).child("breathRatingBefore").setValue(getIntent().getStringExtra("breathRating"));
             reference.child(String.valueOf(timestamp)).child("puffs").setValue(numPuffs);
             reference.child(String.valueOf(timestamp)).child("breathRatingAfter").setValue(rating);
+            DatabaseReference pefRef = FirebaseDatabase.getInstance().getReference().child("logs").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("pef");
+            if (intent.hasExtra("prePEF")) {
+                reference.child(String.valueOf(timestamp)).child("prePEF").setValue(intent.getIntExtra("prePEF", 0));
+                pefRef.child(String.valueOf(intent.getLongExtra("preTimestamp", 0))).setValue(intent.getIntExtra("prePEF", 0));
+            }
+            if(!pef.getText().toString().isEmpty()) {
+                reference.child(String.valueOf(timestamp)).child("postPEF").setValue(Integer.parseInt(pef.getText().toString()));
+                pefRef.child(String.valueOf(timestamp)).setValue(Integer.parseInt(pef.getText().toString()));
+            }
             Intent intent2 = new Intent(Logging_PostCheck.this, Child_Input.class);
             if (intent.hasExtra("PARENT_VIEW")) {
                 intent2.putExtra("PARENT_VIEW", (Parcelable) intent.getParcelableExtra("PARENT_VIEW"));

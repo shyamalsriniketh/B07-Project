@@ -14,22 +14,26 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
+import android.widget.CheckBox;
 
 public class Child_Input extends AppCompatActivity {
 
     Button medicationButton;
     Button checkinButton;
     Button back;
+    Button pefButton;
+    CheckBox lowInventory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_input);
         Intent i = getIntent();
+        lowInventory = findViewById(R.id.Child_Inventory);
 
         medicationButton = findViewById(R.id.Log_Medicine_Button);
         medicationButton.setOnClickListener(v -> {
+            //TODO: handle low inventory alert if checked
             Intent intent = new Intent(Child_Input.this, Medication_Selection.class);
             if (i.hasExtra("PARENT_VIEW")) {
                 intent.putExtra("PARENT_VIEW", (Parcelable) i.getParcelableExtra("PARENT_VIEW"));
@@ -39,6 +43,7 @@ public class Child_Input extends AppCompatActivity {
 
         checkinButton = findViewById(R.id.daily_Check_in_Button);
         checkinButton.setOnClickListener(v -> {
+            //TODO: handle low inventory alert if checked
             FirebaseDatabase.getInstance().getReference().child("logs").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("dailyCheckin").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -57,6 +62,16 @@ public class Child_Input extends AppCompatActivity {
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {}
             });
+        });
+
+        pefButton = findViewById(R.id.PEF_Button);
+        pefButton.setOnClickListener(v -> {
+            //TODO: handle low inventory alert if checked
+            Intent intent = new Intent(Child_Input.this, PEF.class);
+            if (i.hasExtra("PARENT_VIEW")) {
+                intent.putExtra("PARENT_VIEW", (Parcelable) i.getParcelableExtra("PARENT_VIEW"));
+            }
+            startActivity(intent);
         });
 
         back = findViewById(R.id.back);

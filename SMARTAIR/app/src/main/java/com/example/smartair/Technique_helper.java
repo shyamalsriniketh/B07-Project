@@ -24,7 +24,7 @@ public class Technique_helper extends AppCompatActivity {
 
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(Technique_helper.this, Pre_check.class);
-            intent.putExtra("medicineType", getIntent().getStringExtra("medicineType"));
+            intent.putExtra("medicineType", i.getStringExtra("medicineType"));
             if (i.hasExtra("PARENT_VIEW")) {
                 intent.putExtra("PARENT_VIEW", (Parcelable) i.getParcelableExtra("PARENT_VIEW"));
             }
@@ -32,8 +32,12 @@ public class Technique_helper extends AppCompatActivity {
         });
         nextButton.setOnClickListener(v -> {
             Intent intent = new Intent(Technique_helper.this, Logging_PostCheck.class);
-            intent.putExtra("medicineType", getIntent().getStringExtra("medicineType"));
-            intent.putExtra("breathRating", getIntent().getStringExtra("breathRating"));
+            intent.putExtra("medicineType", i.getStringExtra("medicineType"));
+            intent.putExtra("breathRating", i.getStringExtra("breathRating"));
+            if (i.hasExtra("prePEF")) {
+                intent.putExtra("prePEF", i.getIntExtra("prePEF", 0));
+                intent.putExtra("preTimestamp", i.getLongExtra("preTimestamp", 0));
+            }
             if (i.hasExtra("PARENT_VIEW")) {
                 intent.putExtra("PARENT_VIEW", (Parcelable) i.getParcelableExtra("PARENT_VIEW"));
             }

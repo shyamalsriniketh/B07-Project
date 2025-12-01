@@ -22,23 +22,11 @@
 
 
     <Button
-        android:id="@+id/daily_Check_in_Button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40sp"
-        android:text="Enter PEF with Pre/Post Check"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/PEF_Button" />
-
-    <Button
         android:id="@+id/PEF_Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40sp"
-        android:text="Manual Enter PEF"
+        android:text="@string/enter_pef"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,12 +64,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40sp"
-        android:text="Inventory is low"
+        android:text="@string/low_inventory"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/daily_Check_in_Button3" />
+        app:layout_constraintTop_toBottomOf="@+id/PEF_Button" />
 
     <Button
         android:id="@+id/back"

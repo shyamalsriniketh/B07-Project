@@ -80,4 +80,8 @@
     <string name="amount_left">Amount Left:</string>
     <string name="no_walking">no_walking</string>
     <string name="enter_number">Enter Number</string>
+    <string name="enter_pef">Enter PEF</string>
+    <string name="low_inventory">Inventory is low</string>
+    <string name="enter_pef_below">Please enter your PEF below</string>
+    <string name="optional_enter_pef_below">(OPTIONAL) Enter your PEF below</string>
 </resources>

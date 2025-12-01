@@ -9,6 +9,32 @@
 
 
     <EditText
+        android:id="@+id/Post_check_PEF_entry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:ems="10"
+        android:hint="@string/enter_pef"
+        android:inputType="text"
+        android:textSize="24sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Post_check_PEF_title" />
+
+    <TextView
+        android:id="@+id/Post_check_PEF_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40sp"
+        android:text="@string/optional_enter_pef_below"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Post_Check_BreathRating" />
+
+    <EditText
         android:id="@+id/Log_Number_Input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -105,7 +131,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/logging_Post_Check_Back_Button"
-        app:layout_constraintTop_toBottomOf="@+id/Post_Check_BreathRating" />
+        app:layout_constraintTop_toBottomOf="@+id/Post_check_PEF_entry" />
 
 
     <Button
@@ -118,7 +144,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/Logging_Post_Check_Finish_Button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Post_Check_BreathRating" />
+        app:layout_constraintTop_toBottomOf="@+id/Post_check_PEF_entry" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
