@@ -8,11 +8,15 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class Logging_PostCheck extends AppCompatActivity {
@@ -116,18 +120,54 @@ public class Logging_PostCheck extends AppCompatActivity {
                 //TODO: send alert
             }
             //TODO: manage streaks/badges, adherence stuff
+
+            if (intent.getStringExtra("medicineType").equals("Controller")) {
+                reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot controllerEntries : snapshot.getChildren()) {
+                            if (Long.parseLong(controllerEntries.getKey()) / (1000L * 60 * 60 * 24) == System.currentTimeMillis() / (1000L * 60 * 60 * 24)) {
+                                reference.child(controllerEntries.getKey()).removeValue();
+                                return;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                });
+            }
+
             reference.child(String.valueOf(timestamp)).child("status").setValue(status);
             reference.child(String.valueOf(timestamp)).child("breathRatingBefore").setValue(getIntent().getStringExtra("breathRating"));
             reference.child(String.valueOf(timestamp)).child("puffs").setValue(numPuffs);
             reference.child(String.valueOf(timestamp)).child("breathRatingAfter").setValue(rating);
             DatabaseReference pefRef = FirebaseDatabase.getInstance().getReference().child("logs").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("pef");
-            if (intent.hasExtra("prePEF")) {
-                reference.child(String.valueOf(timestamp)).child("prePEF").setValue(intent.getIntExtra("prePEF", 0));
-                pefRef.child(String.valueOf(intent.getLongExtra("preTimestamp", 0))).setValue(intent.getIntExtra("prePEF", 0));
-            }
-            if(!pef.getText().toString().isEmpty()) {
-                reference.child(String.valueOf(timestamp)).child("postPEF").setValue(Integer.parseInt(pef.getText().toString()));
-                pefRef.child(String.valueOf(timestamp)).setValue(Integer.parseInt(pef.getText().toString()));
+            if (intent.hasExtra("prePEF") || !pef.getText().toString().isEmpty()) {
+                pefRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot pefEntries : snapshot.getChildren()) {
+                            if (Long.parseLong(pefEntries.getKey()) / (1000L * 60 * 60 * 24) == System.currentTimeMillis() / (1000L * 60 * 60 * 24) && pefEntries.getValue(String.class).equals("No entry today")) {
+                                pefRef.child(pefEntries.getKey()).removeValue();
+                                break;
+                            }
+                        }
+
+                        if (intent.hasExtra("prePEF")) {
+                            reference.child(String.valueOf(timestamp)).child("prePEF").setValue(intent.getIntExtra("prePEF", 0));
+                            pefRef.child(String.valueOf(intent.getLongExtra("preTimestamp", 0))).setValue(intent.getIntExtra("prePEF", 0));
+                        }
+                        if (!pef.getText().toString().isEmpty()) {
+                            reference.child(String.valueOf(timestamp)).child("postPEF").setValue(Integer.parseInt(pef.getText().toString()));
+                            pefRef.child(String.valueOf(timestamp)).setValue(Integer.parseInt(pef.getText().toString()));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
             }
             Intent intent2 = new Intent(Logging_PostCheck.this, Child_Input.class);
             if (intent.hasExtra("PARENT_VIEW")) {

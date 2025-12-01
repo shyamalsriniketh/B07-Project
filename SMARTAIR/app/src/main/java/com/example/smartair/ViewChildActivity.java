@@ -3,6 +3,7 @@ package com.example.smartair;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -89,12 +90,12 @@ public class ViewChildActivity extends AppCompatActivity {
 
     private void displayChildData(String username) {
         ArrayList<String> data = new ArrayList<>();
-        reference.child("children").addValueEventListener(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 DataSnapshot snapshots = null;
-                for (DataSnapshot shotChild : snapshot.getChildren()) {
-                    if (shotChild.child("id").getValue().toString().equals(username)) {
+                for (DataSnapshot shotChild : snapshot.child("children").getChildren()) {
+                    if (shotChild.child("id").getValue(String.class).equals(username)) {
                         snapshots = shotChild;
                         break;
                     }
@@ -206,13 +207,14 @@ public class ViewChildActivity extends AppCompatActivity {
                     viewAsChild.setVisibility(View.INVISIBLE);
                     shareWithProvider.setVisibility(View.INVISIBLE);
                     save.setOnClickListener(v -> {
-                        if (!dataInput.getText().toString().isEmpty()) {
+                        String input = dataInput.getText().toString();
+                        if (!(input.isEmpty() || input.equals(String.valueOf(finalSnapshots.child(key).getValue(Object.class))))) {
                             switch (key) {
                                 case "age":
                                 case "pb":
                                 case "highQualitySessionNum":
                                 case "lowRescueMonthNum":
-                                    int number = Integer.parseInt(dataInput.getText().toString());
+                                    int number = Integer.parseInt(input);
                                     if ((key.equals("age") && number >= 6 && number <= 16)
                                             || (key.equals("pb") && number > 0)
                                             || (key.equals("highQualitySessionNum") && number >= 0)
@@ -225,7 +227,7 @@ public class ViewChildActivity extends AppCompatActivity {
                                     break;
                                 case "rescueLeft":
                                 case "controllerLeft":
-                                    double percent = Double.parseDouble(dataInput.getText().toString());
+                                    double percent = Double.parseDouble(input);
                                     if (percent >= 0 && percent <= 100) {
                                         reference.child("children").child(finalSnapshots.getKey()).child(key).setValue(percent);
                                     }
@@ -234,9 +236,18 @@ public class ViewChildActivity extends AppCompatActivity {
                                     }
                                     break;
                                 case "controllerToday":
-                                    String input = dataInput.getText().toString().toLowerCase();
-                                    if (input.equals("true") || input.equals("false")) {
-                                        reference.child("children").child(finalSnapshots.getKey()).child(key).setValue(input.equals("true"));
+                                    if (input.equals("true")) {
+                                        reference.child("children").child(finalSnapshots.getKey()).child(key).setValue(true);
+                                        reference.child("logs").child(finalSnapshots.getKey()).child("controller").child(String.valueOf(System.currentTimeMillis())).setValue("No entry today");
+                                    }
+                                    else if (input.equals("false")) {
+                                        reference.child("children").child(finalSnapshots.getKey()).child(key).setValue(false);
+                                        for (DataSnapshot controllerEntries : snapshot.child("logs").child(finalSnapshots.getKey()).child("controller").getChildren()) {
+                                            if (Long.parseLong(controllerEntries.getKey()) / (1000L * 60 * 60 * 24) == System.currentTimeMillis() / (1000L * 60 * 60 * 24)) {
+                                                reference.child("logs").child(finalSnapshots.getKey()).child("controller").child(controllerEntries.getKey()).removeValue();
+                                                break;
+                                            }
+                                        }
                                     }
                                     else {
                                         Toast.makeText(ViewChildActivity.this, "Invalid input", Toast.LENGTH_LONG).show();

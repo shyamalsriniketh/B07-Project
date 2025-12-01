@@ -3,6 +3,7 @@ package com.example.smartair;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
@@ -74,7 +75,7 @@ public class Medication_Selection extends AppCompatActivity {
                         return;
                     }
                     for (DataSnapshot snapshots : snapshot.child("logs").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("controller").getChildren()) {
-                        if (Long.parseLong(snapshots.getKey()) / (1000L * 60 * 60 * 24) == System.currentTimeMillis() / (1000L * 60 * 60 * 24)) {
+                        if (Long.parseLong(snapshots.getKey()) / (1000L * 60 * 60 * 24) == System.currentTimeMillis() / (1000L * 60 * 60 * 24) && !String.valueOf(snapshots.getValue(Object.class)).equals("No entry today")) {
                             Toast.makeText(Medication_Selection.this, "You have already taken today's controller dose!", Toast.LENGTH_SHORT).show();
                             return;
                         }

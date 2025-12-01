@@ -6,10 +6,15 @@ import android.os.Parcelable;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class PEF extends AppCompatActivity {
@@ -43,6 +48,21 @@ public class PEF extends AppCompatActivity {
                 Toast.makeText(PEF.this, "Please fill in your PEF", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot pefEntries : snapshot.getChildren()) {
+                        if (Long.parseLong(pefEntries.getKey()) / (1000L * 60 * 60 * 24) == System.currentTimeMillis() / (1000L * 60 * 60 * 24) && String.valueOf(pefEntries.getValue(Object.class)).equals("No entry today")) {
+                            reference.child(pefEntries.getKey()).removeValue();
+                            return;
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {}
+            });
 
             int p = Integer.parseInt(manualPef);
             long timestamp = System.currentTimeMillis();
