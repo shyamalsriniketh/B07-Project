@@ -66,7 +66,7 @@ public class Medication_Selection extends AppCompatActivity {
                 startActivity(intent);
                 return;
             }
-            FirebaseDatabase.getInstance().getReference().addValueEventListener(new ValueEventListener() {
+            FirebaseDatabase.getInstance().getReference().addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (!snapshot.child("children").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("controllerToday").getValue(Boolean.class)) {
