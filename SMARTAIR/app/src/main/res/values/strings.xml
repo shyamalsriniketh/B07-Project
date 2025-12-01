@@ -101,7 +101,6 @@
     <string name="low_inventory">Inventory is low</string>
     <string name="enter_pef_below">Please enter your PEF below</string>
     <string name="optional_enter_pef_below">(OPTIONAL) Enter your PEF below</string>
-    <string name="child_controls">You can create an account for your child with a username and password at any time. You can also configure many settings for them, such as their name, age, personal best peak-flow (PB), thresholds to earn badges, and action plans for when your child is in the green, orange, or red zone (% peak-flow (PEF) of PB). All they will see is their own data.</string>
     <string name="as_a_child">- videos to help you take your medicine\n\n- enter how you\'re feeling\n\n- what medicine you have taken\n\n- help if you have trouble breathing</string>
     <string name="things_shared_title">Things that a parent can choose to share with you:</string>
 </resources>
