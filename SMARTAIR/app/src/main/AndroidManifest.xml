@@ -50,6 +50,12 @@
             android:name=".Child_Input"
             android:exported="false" />
         <activity
+            android:name=".homeStepsActivitiy"
+            android:exported="false" />
+        <activity
+            android:name=".triageActivity"
+            android:exported="false" />
+        <activity
             android:name=".ChildDashboardActivity"
             android:exported="false" />
         <activity

@@ -32,4 +32,8 @@ public class RoleSelectionActivity extends AppCompatActivity {
         Intent i = new Intent(this, Provider_Sign_in.class);
         startActivity(i);
     }
+    public void backToLogin(View v){
+        Intent i = new Intent(this,Login.class);
+        startActivity(i);
+    }
 }
