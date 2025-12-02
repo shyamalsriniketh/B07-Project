@@ -119,7 +119,6 @@ public class Logging_PostCheck extends AppCompatActivity {
                 status = status3;
                 //TODO: send alert
             }
-            //TODO: manage streaks/badges, adherence stuff
 
             if (intent.getStringExtra("medicineType").equals("Controller")) {
                 reference.addListenerForSingleValueEvent(new ValueEventListener() {
