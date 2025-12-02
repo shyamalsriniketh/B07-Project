@@ -18,6 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Date;
+
 
 public class Logging_PostCheck extends AppCompatActivity {
 
@@ -117,7 +119,23 @@ public class Logging_PostCheck extends AppCompatActivity {
 
             if(worseCheckbox.isChecked()){
                 status = status3;
-                //TODO: send alert
+                DatabaseReference parentRef = FirebaseDatabase.getInstance().getReference().child("parents");
+                parentRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot parent : snapshot.getChildren()) {
+                            for (DataSnapshot child : parent.child("linkedChildren").getChildren()) {
+                                if (child.getValue(String.class).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                                    FirebaseDatabase.getInstance().getReference().child("alerts").child(parent.getKey()).child("worseAfterDose").setValue(true);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                });
             }
             //TODO: manage streaks/badges, adherence stuff
 
@@ -169,6 +187,36 @@ public class Logging_PostCheck extends AppCompatActivity {
                     }
                 });
             }
+
+            if (intent.getStringExtra("medicineType").equals("Rescue")) {
+                DatabaseReference mainRef = FirebaseDatabase.getInstance().getReference();
+                mainRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        int count = 0;
+                        for (DataSnapshot rescueEntries : snapshot.child("logs").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("rescue").getChildren()) {
+                            if (Long.parseLong(rescueEntries.getKey()) / (1000L * 60 * 60 * 3) == System.currentTimeMillis() / (1000L * 60 * 60 * 3)) {
+                                count++;
+                            }
+                        }
+                        if (count < 3) {
+                            return;
+                        }
+                        for (DataSnapshot parent : snapshot.child("parents").getChildren()) {
+                            for (DataSnapshot child : parent.child("linkedChildren").getChildren()) {
+                                if (child.getValue(String.class).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                                    mainRef.child("alerts").child(parent.getKey()).child("rapidRescue").setValue(true);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                });
+            }
+
             Intent intent2 = new Intent(Logging_PostCheck.this, Child_Input.class);
             if (intent.hasExtra("PARENT_VIEW")) {
                 intent2.putExtra("PARENT_VIEW", (Parcelable) intent.getParcelableExtra("PARENT_VIEW"));

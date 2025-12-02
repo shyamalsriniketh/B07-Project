@@ -12,6 +12,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_dashboard);
+        //TODO: check for alerts
         Button button = findViewById(R.id.button3);
         button.setOnClickListener(v -> {
             Intent i = new Intent(this, ManageChildrenActivity.class);

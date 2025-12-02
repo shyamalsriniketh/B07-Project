@@ -243,6 +243,9 @@ public class ViewChildActivity extends AppCompatActivity {
                                     double percent = Double.parseDouble(input);
                                     if (percent >= 0 && percent <= 100) {
                                         reference.child("children").child(finalSnapshots.getKey()).child(key).setValue(percent);
+                                        if (percent <= 20) {
+                                            reference.child("alerts").child(user.getUid()).child("inventoryLow").setValue(true);
+                                        }
                                     }
                                     else {
                                         Toast.makeText(ViewChildActivity.this, "Invalid input", Toast.LENGTH_LONG).show();
