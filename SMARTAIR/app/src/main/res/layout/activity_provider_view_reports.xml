@@ -7,6 +7,19 @@
     android:layout_height="match_parent"
     tools:context=".ProviderViewReports">
 
+    <TextView
+        android:id="@+id/providerReportText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="Loading report...\n"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/button9"
         android:layout_width="wrap_content"
@@ -22,4 +35,18 @@
         android:text="Button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/pieChartZones"
+        android:layout_width="208dp"
+        android:layout_height="176dp"
+        tools:layout_editor_absoluteX="203dp"
+        tools:layout_editor_absoluteY="90dp" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/lineChartRescue"
+        android:layout_width="199dp"
+        android:layout_height="176dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="90dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
