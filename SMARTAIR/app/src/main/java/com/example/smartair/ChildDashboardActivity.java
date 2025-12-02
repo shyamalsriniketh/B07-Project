@@ -22,6 +22,8 @@ import com.google.firebase.database.ValueEventListener;
 public class ChildDashboardActivity extends AppCompatActivity {
     Button back;
     Button input;
+    DatabaseReference reference;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +54,8 @@ public class ChildDashboardActivity extends AppCompatActivity {
         });
 
         String[] curZone = new String[1]; //temp variable, delete after proper implementation
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -76,7 +78,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
                 }
                 else {
                     curZone[0] = "Red zone"; //display "red zone"
-                    //TODO: send alert to parent
+                    sendRedZoneAlert(snapshot);
                 }
 
                 DataSnapshot latestZoneEntry = null;
@@ -91,5 +93,16 @@ public class ChildDashboardActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
+    }
+
+    private void sendRedZoneAlert(DataSnapshot snapshot) {
+        for (DataSnapshot parent : snapshot.child("parents").getChildren()) {
+            for (DataSnapshot child : parent.child("linkedChildren").getChildren()) {
+                if (child.getValue(String.class).equals(user.getUid())) {
+                    reference.child("alerts").child(parent.getKey()).child("redZone").setValue(true);
+                    return;
+                }
+            }
+        }
     }
 }

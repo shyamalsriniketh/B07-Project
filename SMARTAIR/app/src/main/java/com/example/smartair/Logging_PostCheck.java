@@ -137,7 +137,6 @@ public class Logging_PostCheck extends AppCompatActivity {
                     public void onCancelled(@NonNull DatabaseError error) {}
                 });
             }
-            //TODO: manage streaks/badges, adherence stuff
 
             if (intent.getStringExtra("medicineType").equals("Controller")) {
                 reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -193,9 +192,10 @@ public class Logging_PostCheck extends AppCompatActivity {
                 mainRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        final long THREE_HOURS_AGO = System.currentTimeMillis() - 1000L * 60 * 60 * 3;
                         int count = 0;
                         for (DataSnapshot rescueEntries : snapshot.child("logs").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("rescue").getChildren()) {
-                            if (Long.parseLong(rescueEntries.getKey()) / (1000L * 60 * 60 * 3) == System.currentTimeMillis() / (1000L * 60 * 60 * 3)) {
+                            if (Long.parseLong(rescueEntries.getKey()) >= THREE_HOURS_AGO) {
                                 count++;
                             }
                         }
