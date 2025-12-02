@@ -2,7 +2,6 @@ package com.example.smartair;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -30,9 +29,11 @@ public class ChildDashboardActivity extends AppCompatActivity {
     boolean week;
     BottomNavigationView navBar;
     NavBarActivity nav;
-    Button input;
     DatabaseReference reference;
     FirebaseUser user;
+    TextView zone;
+    TextView lastRescueTime;
+    TextView weeklyCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,78 +43,59 @@ public class ChildDashboardActivity extends AppCompatActivity {
         if (i.hasExtra("PARENT_VIEW")) {
             back = findViewById(R.id.back);
             back.setVisibility(View.VISIBLE);
-            back.setOnClickListener(v -> {
-                FirebaseAuth.getInstance().updateCurrentUser(i.getParcelableExtra("PARENT_VIEW"));
-                Intent j = new Intent(this, ViewChildActivity.class);
-                startActivity(j);
-            });
         }
+
         nav = new NavBarActivity();
         week = true;
-        navBar.setOnItemSelectedListener(item-> {
-            nav.childNav(ChildDashboardActivity.this, item.getItemId(), getIntent());
-            return true;
-        });
-        namebox= findViewById(R.id.textView8);
-        namebox.setText("Welcome "+ child.getName());
+        namebox = findViewById(R.id.textView8);
         plot = findViewById(R.id.plot);
         toggle = findViewById(R.id.button);
-        graph= new GraphActivity(plot,child.getId());
-        graph.showWeeklyView();
-        navBar= findViewById(R.id.bottomNavigationView);
-        toggle.setOnClickListener(view -> {
-            if (week) {
-                graph.monthlyView();
-                toggle.setText("Show Weekly");
-                week = false;
-            } else {
-                graph.weeklyView();
-                toggle.setText("Show Monthly");
-                week = true;
-            }
-        });
-        Button button2 = findViewById(R.id.button13);
-        button2.setOnClickListener(v -> {
-            Intent l = new Intent(this, Child_Motivation.class);
-            if (i.hasExtra("PARENT_VIEW")) {
-                l.putExtra("PARENT_VIEW", (Parcelable) i.getParcelableExtra("PARENT_VIEW"));
-            }
-            startActivity(l);
-        });
-        input = findViewById(R.id.button12);
-        input.setOnClickListener(v -> {
-            Intent k = new Intent(this, Child_Input.class);
-            if (i.hasExtra("PARENT_VIEW")) {
-                k.putExtra("PARENT_VIEW", (Parcelable) i.getParcelableExtra("PARENT_VIEW"));
-            }
-            startActivity(k);
-        });
-
-        String[] curZone = new String[1]; //temp variable, delete after proper implementation
+        navBar = findViewById(R.id.bottomNavigationView);
+        zone = findViewById(R.id.tile_text2);
+        lastRescueTime = findViewById(R.id.tile_text4);
+        weeklyCount = findViewById(R.id.tile_text6);
         reference = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                child = snapshot.child("children").child(user.getUid()).getValue(Child.class);
+                namebox.setText("Welcome "+ child.getName());
+                graph = new GraphActivity(plot, child.getId());
+
+                graph.showWeeklyView();
+                toggle.setOnClickListener(view -> {
+                    if (week) {
+                        graph.monthlyView();
+                        toggle.setText("Show Weekly");
+                        week = false;
+                    } else {
+                        graph.weeklyView();
+                        toggle.setText("Show Monthly");
+                        week = true;
+                    }
+                });
+
                 DataSnapshot latestPEFEntry = null;
                 for (DataSnapshot pefEntries : snapshot.child("logs").child(user.getUid()).child("pef").getChildren()) {
                     latestPEFEntry = pefEntries;
                 }
                 int pb = snapshot.child("children").child(user.getUid()).child("pb").getValue(Integer.class);
                 if (String.valueOf(latestPEFEntry.getValue(Object.class)).equals("No entry today") || pb == 0) {
-                    curZone[0] = "No zone"; //display "no zone"
+                    zone.setText("No zone");
                     return;
                 }
                 int curPEF = latestPEFEntry.getValue(Integer.class);
                 double percent = (double) (curPEF) / pb;
                 if (percent >= 0.8) {
-                    curZone[0] = "Green zone"; //display "green zone"
+                    zone.setText("Green zone");
                 }
                 else if (percent >= 0.5) {
-                    curZone[0] = "Yellow zone"; //display "yellow zone"
+                    zone.setText("Yellow zone");
                 }
                 else {
-                    curZone[0] = "Red zone"; //display "red zone"
+                    zone.setText("Red zone");
                     sendRedZoneAlert(snapshot);
                 }
 
@@ -121,9 +103,23 @@ public class ChildDashboardActivity extends AppCompatActivity {
                 for (DataSnapshot zoneEntries : snapshot.child("logs").child(user.getUid()).child("zoneChanges").getChildren()) {
                     latestZoneEntry = zoneEntries;
                 }
-                if (latestZoneEntry == null || !latestZoneEntry.getValue(String.class).equals(curZone[0])) {
-                    reference.child("logs").child(user.getUid()).child("zoneChanges").child(String.valueOf(System.currentTimeMillis())).setValue(curZone[0]);
+                if (latestZoneEntry == null || !latestZoneEntry.getValue(String.class).equals(zone.getText().toString())) {
+                    reference.child("logs").child(user.getUid()).child("zoneChanges").child(String.valueOf(System.currentTimeMillis())).setValue(zone.getText().toString());
                 }
+
+                //set text for last rescue time
+                //set text for weekly count
+
+                navBar.setOnItemSelectedListener(item-> {
+                    nav.childNav(ChildDashboardActivity.this, item.getItemId(), i);
+                    return true;
+                });
+
+                back.setOnClickListener(v -> {
+                    FirebaseAuth.getInstance().updateCurrentUser(i.getParcelableExtra("PARENT_VIEW"));
+                    Intent j = new Intent(ChildDashboardActivity.this, ViewChildActivity.class);
+                    startActivity(j);
+                });
             }
 
             @Override

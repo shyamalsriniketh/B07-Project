@@ -11,7 +11,6 @@ import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.StepMode;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
-import com.androidplot.xy.XYSeries;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,13 +22,12 @@ import java.text.Format;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 public class GraphActivity {
     SimpleXYSeries weeklySeries;
     SimpleXYSeries monthlySeries;
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMM-dd");
+    SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
     LineAndPointFormatter format;
     String userid;
     boolean isDataLoaded=false;
@@ -55,12 +53,7 @@ public class GraphActivity {
     public void weeklyView() {
         if (!isDataLoaded) {
             Log.d("Graph", "Data not loaded yet, waiting...");
-            setOnDataLoaded(new Runnable() {
-                @Override
-                public void run() {
-                    showWeeklyView();
-                }
-            });
+            setOnDataLoaded(() -> showWeeklyView());
             return;
         }
         showWeeklyView();
@@ -209,12 +202,7 @@ public class GraphActivity {
     public void monthlyView() {
         if (!isDataLoaded) {
             Log.d("Graph", "Data not loaded yet, waiting...");
-            setOnDataLoaded(new Runnable() {
-                @Override
-                public void run() {
-                    showMonthlyView();
-                }
-            });
+            setOnDataLoaded(() -> showMonthlyView());
             return;
         }
         showMonthlyView();
