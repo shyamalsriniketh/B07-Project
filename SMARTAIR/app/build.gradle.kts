@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.viewpager2)
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:13.0.0")
     testImplementation(libs.junit)
+    testImplementation("org.mockito:mockito-core:5.20.0")
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }
