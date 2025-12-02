@@ -57,7 +57,7 @@
             android:exported="false" />
         <activity
             android:name=".ChildDashboardActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".ProviderViewReports"
             android:exported="false" />
@@ -81,7 +81,7 @@
             android:exported="false" />
         <activity
             android:name=".ParentDashboardActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Provider_Sign_in"
             android:exported="false" />

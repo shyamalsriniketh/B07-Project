@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/childprofile"
+        android:icon="@drawable/baseline_person_24"
+        android:title="Profile"/>
+    <item
+        android:id="@+id/childhome"
+        android:icon="@drawable/baseline_home_24"
+        android:title="Home"/>
+    <item
+        android:id="@+id/triage"
+        android:icon="@drawable/outline_brightness_alert_24"
+        android:title="Not Feeling Well?"/>
+
+</menu>

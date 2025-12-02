@@ -16,12 +16,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 
 public class PEF extends AppCompatActivity {
 
     Button backButton, nextButton;
     DatabaseReference reference;
     EditText pef;
+    ArrayList<Integer> pefValues = new ArrayList<>();
+    ArrayList<Long> pefTimestamps = new ArrayList<>();
 
 
     @Override
@@ -67,6 +71,9 @@ public class PEF extends AppCompatActivity {
             int p = Integer.parseInt(manualPef);
             long timestamp = System.currentTimeMillis();
             reference.child(String.valueOf(timestamp)).setValue(p);
+            pefValues.add(p);
+            pefTimestamps.add(timestamp);
+
 
             Intent intent = new Intent(PEF.this, Child_Input.class);
             if (getIntent().hasExtra("PARENT_VIEW")) {
