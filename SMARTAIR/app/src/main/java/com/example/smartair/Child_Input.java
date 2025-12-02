@@ -33,7 +33,9 @@ public class Child_Input extends AppCompatActivity {
 
         medicationButton = findViewById(R.id.Log_Medicine_Button);
         medicationButton.setOnClickListener(v -> {
-            //TODO: handle low inventory alert if checked
+            if (lowInventory.isChecked()) {
+                handleLowInventory();
+            }
             Intent intent = new Intent(Child_Input.this, Medication_Selection.class);
             if (i.hasExtra("PARENT_VIEW")) {
                 intent.putExtra("PARENT_VIEW", (Parcelable) i.getParcelableExtra("PARENT_VIEW"));
@@ -43,8 +45,10 @@ public class Child_Input extends AppCompatActivity {
 
         checkinButton = findViewById(R.id.daily_Check_in_Button);
         checkinButton.setOnClickListener(v -> {
-            //TODO: handle low inventory alert if checked
-            FirebaseDatabase.getInstance().getReference().child("logs").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("dailyCheckin").addValueEventListener(new ValueEventListener() {
+            if (lowInventory.isChecked()) {
+                handleLowInventory();
+            }
+            FirebaseDatabase.getInstance().getReference().child("logs").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("dailyCheckin").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot snapshots : snapshot.getChildren()) {
@@ -66,7 +70,9 @@ public class Child_Input extends AppCompatActivity {
 
         pefButton = findViewById(R.id.PEF_Button);
         pefButton.setOnClickListener(v -> {
-            //TODO: handle low inventory alert if checked
+            if (lowInventory.isChecked()) {
+                handleLowInventory();
+            }
             Intent intent = new Intent(Child_Input.this, PEF.class);
             if (i.hasExtra("PARENT_VIEW")) {
                 intent.putExtra("PARENT_VIEW", (Parcelable) i.getParcelableExtra("PARENT_VIEW"));
@@ -82,5 +88,10 @@ public class Child_Input extends AppCompatActivity {
             }
             startActivity(intent);
         });
+    }
+
+    private void handleLowInventory() {
+        //schedule alert
+        FirebaseDatabase.getInstance().getReference().child("children").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("inventoryMarkedLow").setValue(true);
     }
 }

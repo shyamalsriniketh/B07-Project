@@ -84,4 +84,7 @@
     <string name="low_inventory">Inventory is low</string>
     <string name="enter_pef_below">Please enter your PEF below</string>
     <string name="optional_enter_pef_below">(OPTIONAL) Enter your PEF below</string>
+    <string name="view_inventory">View child\'s inventory</string>
+    <string name="child_marked_low">Your child has marked that inventory is low! If it isn\'t, click the button below to dismiss it.</string>
+    <string name="dismiss">Dismiss</string>
 </resources>

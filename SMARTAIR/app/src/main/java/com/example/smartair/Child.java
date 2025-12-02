@@ -19,6 +19,7 @@ public class Child extends User {
     String rescueExpiryDate;
     String controllerPurchaseDate;
     String controllerExpiryDate;
+    boolean inventoryMarkedLow;
 
     public Child() {
         super();
@@ -43,6 +44,7 @@ public class Child extends User {
         rescueExpiryDate = "";
         controllerPurchaseDate = "";
         controllerExpiryDate = "";
+        inventoryMarkedLow = false;
     }
 
     public String getName() {
@@ -117,6 +119,10 @@ public class Child extends User {
         return controllerExpiryDate;
     }
 
+    public boolean getInventoryMarkedLow() {
+        return inventoryMarkedLow;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -187,5 +193,9 @@ public class Child extends User {
 
     public void setControllerExpiryDate(String controllerExpiryDate) {
         this.controllerExpiryDate = controllerExpiryDate;
+    }
+
+    public void setInventoryMarkedLow(boolean inventoryMarkedLow) {
+        this.inventoryMarkedLow = inventoryMarkedLow;
     }
 }

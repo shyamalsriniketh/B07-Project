@@ -85,17 +85,6 @@
 
 
         <Button
-            android:id="@+id/Technique_Helper_PlayVideo_Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10sp"
-            android:text="@string/play_video"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/main" />
-
-        <Button
             android:id="@+id/Technique_Helper_Next_Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -104,8 +93,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/technique_Helper_Back_Button"
-            app:layout_constraintTop_toBottomOf="@+id/Technique_Helper_PlayVideo_Button" />
+            app:layout_constraintStart_toEndOf="@id/technique_Helper_Back_Button" />
 
         <Button
             android:id="@+id/technique_Helper_Back_Button"
@@ -116,25 +104,23 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/Technique_Helper_Next_Button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Technique_Helper_PlayVideo_Button" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/main"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="10sp"
-            app:layout_constraintBottom_toTopOf="@id/Technique_Helper_PlayVideo_Button"
+            app:layout_constraintBottom_toTopOf="@+id/technique_Helper_Back_Button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/technique_helper_Text5"
             tools:context=".Technique_helper">
 
-
-            <VideoView
+            <WebView
                 android:id="@+id/Technique_Helper_Video"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -148,7 +148,7 @@ public class Logging_PostCheck extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot pefEntries : snapshot.getChildren()) {
-                            if (Long.parseLong(pefEntries.getKey()) / (1000L * 60 * 60 * 24) == System.currentTimeMillis() / (1000L * 60 * 60 * 24) && pefEntries.getValue(String.class).equals("No entry today")) {
+                            if (Long.parseLong(pefEntries.getKey()) / (1000L * 60 * 60 * 24) == System.currentTimeMillis() / (1000L * 60 * 60 * 24) && String.valueOf(pefEntries.getValue(Object.class)).equals("No entry today")) {
                                 pefRef.child(pefEntries.getKey()).removeValue();
                                 break;
                             }

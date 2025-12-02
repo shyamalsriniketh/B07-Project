@@ -39,6 +39,7 @@ public class ViewChildActivity extends AppCompatActivity {
     EditText dataInput;
     Button viewAsChild;
     Button shareWithProvider;
+    Button viewInventory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,8 @@ public class ViewChildActivity extends AppCompatActivity {
         dataInput = findViewById(R.id.data_entry);
         viewAsChild = findViewById(R.id.view_as_child);
         shareWithProvider = findViewById(R.id.share_with_provider);
+        viewInventory = findViewById(R.id.inventory);
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -73,10 +76,9 @@ public class ViewChildActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(ViewChildActivity.this, "Error: couldn't display children", Toast.LENGTH_LONG).show();
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -103,7 +105,8 @@ public class ViewChildActivity extends AppCompatActivity {
                 for (DataSnapshot attributes : snapshots.getChildren()) {
                     String key = attributes.getKey();
                     if (!key.equals("onboarded") && !key.equals("id") && !key.equals("password")
-                            && !key.equals("inviteCodeProvider") && !key.equals("providerCodeExpiry")) {
+                            && !key.equals("inviteCodeProvider") && !key.equals("providerCodeExpiry")
+                            && !key.equals("inventoryMarkedLow")) {
                         data.add(key + ": " + snapshots.child(key).getValue(Object.class));
                     }
                 }
@@ -111,6 +114,7 @@ public class ViewChildActivity extends AppCompatActivity {
                 list.setAdapter(adapter);
                 list.setVisibility(View.VISIBLE);
                 DataSnapshot finalSnapshots = snapshots;
+
                 viewAsChild.setOnClickListener(v -> {
                     FirebaseAuth mAuth = FirebaseAuth.getInstance();
                     mAuth.signInWithEmailAndPassword(finalSnapshots.child("id").getValue(String.class) + AddChildActivity.DOMAIN, finalSnapshots.child("password").getValue(String.class)).addOnCompleteListener(task -> {
@@ -121,11 +125,19 @@ public class ViewChildActivity extends AppCompatActivity {
                         }
                     });
                 });
+
                 shareWithProvider.setOnClickListener(v -> {
                     Intent i = new Intent(ViewChildActivity.this, InvitingProviderActivity.class); //should go to screen where toggles are first
                     i.putExtra("CHILD_UID", finalSnapshots.getKey());
                     startActivity(i);
                 });
+
+                viewInventory.setOnClickListener(v -> {
+                    Intent i = new Intent(ViewChildActivity.this, Inventory.class);
+                    i.putExtra("CHILD_UID", finalSnapshots.getKey());
+                    startActivity(i);
+                });
+
                 list.setOnItemClickListener((parent, view, position, id) -> {
                     String keyAndValue = parent.getItemAtPosition(position).toString();
                     String key = keyAndValue.split(":")[0];
@@ -206,6 +218,8 @@ public class ViewChildActivity extends AppCompatActivity {
                     save.setVisibility(View.VISIBLE);
                     viewAsChild.setVisibility(View.INVISIBLE);
                     shareWithProvider.setVisibility(View.INVISIBLE);
+                    viewInventory.setVisibility(View.INVISIBLE);
+
                     save.setOnClickListener(v -> {
                         String input = dataInput.getText().toString();
                         if (!(input.isEmpty() || input.equals(String.valueOf(finalSnapshots.child(key).getValue(Object.class))))) {
@@ -278,6 +292,7 @@ public class ViewChildActivity extends AppCompatActivity {
                                     break;
                             }
                         }
+
                         dataName.setVisibility(View.INVISIBLE);
                         dataInput.setVisibility(View.INVISIBLE);
                         save.setVisibility(View.INVISIBLE);
@@ -285,6 +300,7 @@ public class ViewChildActivity extends AppCompatActivity {
                         spinner.setVisibility(View.VISIBLE);
                         viewAsChild.setVisibility(View.VISIBLE);
                         shareWithProvider.setVisibility(View.VISIBLE);
+                        viewInventory.setVisibility(View.VISIBLE);
                     });
                 });
             }
