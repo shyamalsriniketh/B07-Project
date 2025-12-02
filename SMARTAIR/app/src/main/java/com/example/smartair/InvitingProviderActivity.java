@@ -2,7 +2,6 @@ package com.example.smartair;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -40,7 +39,6 @@ public class InvitingProviderActivity extends AppCompatActivity {
         displayCode = findViewById(R.id.display_code);
         Intent i = getIntent(); //intent should be created with extra String for the selected child's username
         childUid = i.getStringExtra("CHILD_UID");
-        Log.d("testing123", childUid);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
