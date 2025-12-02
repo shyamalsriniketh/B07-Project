@@ -20,6 +20,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,42 +86,170 @@ public class ProviderViewReports extends AppCompatActivity {
             boolean showZones = getBool(settingsSnap, "zoneDistribution");
             boolean showTriage = getBool(settingsSnap, "triageIncidents");
             boolean showPeakflow = getBool(settingsSnap, "peakFlow");
+            boolean showTriggers = getBool(settingsSnap, "triggers");
+            boolean showControllerSummary = getBool(settingsSnap, "controllerSummary");
+            boolean three_months = getBool(settingsSnap, "threeMonths");
+            boolean six_months = getBool(settingsSnap, "sixMonths");
+            if(showSymptoms){
+                reference.child("logs").child(childId).child("dailyCheckin").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot item : snapshot.getChildren()){
+                            String Date = item.getKey();
+                            long date = Long.parseLong(Date);
+                            long now = System.currentTimeMillis();
+                            long sixMonthsAgo = now - (long)(6L * 30 * 24 * 3600 * 1000);
+                            long threeMonthsAgo = now - (long)(3L * 30 * 24 * 60 * 60 * 1000);
+                            for(DataSnapshot node : item.getChildren()){
+                                String key = node.getKey();
+                                if(key.equals("triggers")) continue;
+                                String value = node.getValue(String.class);
+                                if(three_months && date >= threeMonthsAgo){
+                                    appendLine(key + "->" + value);
+                                }
+                                else if(six_months && date >= sixMonthsAgo){
+                                    appendLine(key + "->" + value);
+                                }
+                            }
+                        }
+                    }
 
-            childRef.child("data").get().addOnSuccessListener(dataSnap -> {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+            if(showControllerSummary){
+                reference.child("logs").child(childId).child("controller").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot item : snapshot.getChildren()){
+                            String Date = item.getKey();
+                            long date = Long.parseLong(Date);
+                            long now = System.currentTimeMillis();
+                            long sixMonthsAgo = now - (long)(6L * 30 * 24 * 3600 * 1000);
+                            long threeMonthsAgo = now - (long)(3L * 30 * 24 * 60 * 60 * 1000);
+                            for(DataSnapshot node : item.getChildren()){
+                                String key = node.getKey();
+                                Object value = node.getValue();
+                                if(three_months && date >= threeMonthsAgo){
+                                    appendLine(key + "->" + value);
+                                }
+                                else if(six_months && date >= sixMonthsAgo){
+                                    appendLine(key + "->" + value);
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+            if(showTriage){
+                reference.child("logs").child(childId).child("Logincidents").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot item : snapshot.getChildren()){
+                            String Date = item.getKey();
+                            long date = Long.parseLong(Date);
+                            long now = System.currentTimeMillis();
+                            long sixMonthsAgo = now - (long)(6L * 30 * 24 * 3600 * 1000);
+                            long threeMonthsAgo = now - (long)(3L * 30 * 24 * 60 * 60 * 1000);
+                            for(DataSnapshot node : item.getChildren()){
+                                if(three_months && date >= threeMonthsAgo){
+                                    String key = node.getKey();
+                                    Object value = node.getValue();
+                                    appendLine(key + "->" + value);
+                                }
+                                else if(six_months && date >= sixMonthsAgo){
+                                    String key = node.getKey();
+                                    Object value = node.getValue();
+                                    appendLine(key + "->" + value);
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+            if(showTriggers){
+                reference.child("logs").child(childId).child("dailyCheckin").addListenerForSingleValueEvent(new ValueEventListener(){
+                    @Override
+                    public void onDataChange(DataSnapshot s){
+                        for(DataSnapshot item : s.getChildren()){
+                            String Date = item.getKey();
+                            long date = Long.parseLong(Date);
+                            long now = System.currentTimeMillis();
+                            long sixMonthsAgo = now - (long)(6L * 30 * 24 * 3600 * 1000);
+                            long threeMonthsAgo = now - (long)(3L * 30 * 24 * 60 * 60 * 1000);
+
+                            if(date >= threeMonthsAgo && three_months){
+                                for(DataSnapshot node : item.getChildren()){
+                                    if(!(node.getKey().equals("triggers"))) continue;
+                                    String display = node.getValue(String.class);
+                                    appendLine(display);
+                                }
+                            }
+                            else if(date >= sixMonthsAgo && six_months){
+                                for(DataSnapshot node : item.getChildren()){
+                                    if(!(node.getKey().equals("triggers"))) continue;
+                                    String display = node.getValue(String.class);
+                                    appendLine(display);
+                                }
+                            }
+
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // required override
+                    }
+                });
+            }
+            if(showRescue){
+                reference.child("logs").child(childId).child("rescue").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot dates : snapshot.getChildren()){
+                            String Date = dates.getKey();
+                            long date = Long.parseLong(Date);
+                            long now = System.currentTimeMillis();
+                            long sixMonthsAgo = now - (long)(6L * 30 * 24 * 3600 * 1000);
+                            long threeMonthsAgo = now - (long)(3L * 30 * 24 * 60 * 60 * 1000);
+                            for(DataSnapshot node : dates.getChildren()){
+                                if(three_months && (date >= threeMonthsAgo)) {
+                                    String key = node.getKey();
+                                    String value = node.getValue(String.class);
+                                    appendLine(key + "->" + value);
+                                }
+                                else if(six_months && (date >= sixMonthsAgo)){
+                                    String key = node.getKey();
+                                    String value = node.getValue(String.class);
+                                    appendLine(key + "->" + value);
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
 
 
-                if (showRescue && dataSnap.hasChild("rescueFrequency")) {
-                    Long rescue = dataSnap.child("rescueFrequency").getValue(Long.class);
-                    showRescueLineChart(rescue);
-                }
-
-
-                if (showSymptoms && dataSnap.hasChild("symptomBurden")) {
-                    Long symptoms = dataSnap.child("symptomBurden").getValue(Long.class);
-                    appendLine("Symptom burden: " + symptoms);
-                }
-
-
-                if (showZones && dataSnap.hasChild("zoneDistribution")) {
-                    Long green = dataSnap.child("zoneDistribution").child("green").getValue(Long.class);
-                    Long yellow = dataSnap.child("zoneDistribution").child("yellow").getValue(Long.class);
-                    Long red = dataSnap.child("zoneDistribution").child("red").getValue(Long.class);
-                    showZonePieChart(green, yellow, red);
-                }
-
-
-                if (showTriage && dataSnap.hasChild("triageIncidents")) {
-                    Long triage = dataSnap.child("triageIncidents").getValue(Long.class);
-                    appendLine("Triage incidents: " + triage);
-                }
-
-                if(showPeakflow && dataSnap.hasChild("peakFlow")){
-                    Long peakflow = dataSnap.child("peakFlow").getValue(Long.class);
-                    appendLine("Peak Flow: " + peakflow);
-                }
-            });
         });
     }
+
     private void showZonePieChart(Long green, Long yellow, Long red) {
 
         List<PieEntry> entries = new ArrayList<>();
@@ -149,6 +281,8 @@ public class ProviderViewReports extends AppCompatActivity {
         lineChartRescue.getDescription().setEnabled(false);
         lineChartRescue.invalidate();
     }
+
+
     private boolean getBool(DataSnapshot snap, String key) {
         Boolean val = snap.child(key).getValue(Boolean.class);
         return val != null && val;

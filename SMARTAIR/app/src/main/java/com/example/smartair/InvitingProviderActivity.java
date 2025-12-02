@@ -28,7 +28,7 @@ public class InvitingProviderActivity extends AppCompatActivity {
     Button revoke;
     TextView title;
     TextView displayCode;
-    Switch swRescue, swSymptom, swZones, swTriage, swPeakflow;
+    Switch swRescue, swSymptom, swZones, swTriage, swPeakflow, swTriggers, swControllerSummary, swThreeMonths, swSixMonths;
 
 
     @Override
@@ -48,11 +48,19 @@ public class InvitingProviderActivity extends AppCompatActivity {
         swZones = findViewById(R.id.switch_zones);
         swTriage = findViewById(R.id.switch_triage);
         swPeakflow = findViewById(R.id.switch_peakflow);
+        swTriggers = findViewById(R.id.switch_triggers);
+        swControllerSummary = findViewById(R.id.switch_controller_summary);
+        swThreeMonths = findViewById(R.id.switch_three_months);
+        swSixMonths = findViewById(R.id.switch_six_months);
         swRescue.setChecked(true);
         swSymptom.setChecked(true);
         swZones.setChecked(true);
         swTriage.setChecked(true);
         swPeakflow.setChecked(true);
+        swSixMonths.setChecked(true);
+        swThreeMonths.setChecked(true);
+
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -92,18 +100,12 @@ public class InvitingProviderActivity extends AppCompatActivity {
         sharing.put("zoneDistribution", swZones.isChecked());
         sharing.put("triageIncidents", swTriage.isChecked());
         sharing.put("peakFlow", swPeakflow.isChecked());
+        sharing.put("triggers", swTriggers.isChecked());
+        sharing.put("controllerSummary", swControllerSummary.isChecked());
+        sharing.put("threeMonths", swThreeMonths.isChecked());
+        sharing.put("sixMonths", swSixMonths.isChecked());
         childRef.child("sharingSettings").setValue(sharing);
-        //SAMPLE DATA DELETE LATER
-        HashMap<String, Object> sampleData = new HashMap<>();
-        sampleData.put("rescueFrequency", 3);
-        sampleData.put("symptomBurden", 7);
-        HashMap<String, Object> zones = new HashMap<>();
-        zones.put("green", 10);
-        zones.put("yellow", 4);
-        zones.put("red", 1);
-        sampleData.put("zoneDistribution", zones);
-        sampleData.put("triageIncidents", 1);
-        childRef.child("data").setValue(sampleData);
+
 
         generate.setVisibility(View.INVISIBLE);
         displayCode.setText("Current code: " + child.getInviteCodeProvider());
