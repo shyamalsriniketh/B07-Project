@@ -11,14 +11,14 @@
         android:id="@+id/providerReportText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:layout_marginBottom="20sp"
+        android:padding="16sp"
         android:text="Loading report...\n"
         android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button9"
@@ -38,15 +38,19 @@
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pieChartZones"
-        android:layout_width="208dp"
-        android:layout_height="176dp"
-        tools:layout_editor_absoluteX="203dp"
-        tools:layout_editor_absoluteY="90dp" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/providerReportText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/lineChartRescue"
+        app:layout_constraintTop_toBottomOf="@+id/button9" />
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/lineChartRescue"
-        android:layout_width="199dp"
-        android:layout_height="176dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="90dp" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/providerReportText"
+        app:layout_constraintEnd_toStartOf="@id/pieChartZones"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button10" />
 </androidx.constraintlayout.widget.ConstraintLayout>

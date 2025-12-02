@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/childprofile"
-        android:icon="@drawable/baseline_person_24"
-        android:title="Profile"/>
-    <item
-        android:id="@+id/childhome"
+        android:id="@+id/child_dashboard"
         android:icon="@drawable/baseline_home_24"
-        android:title="Home"/>
+        android:title="Dashboard" />
+    <item
+        android:id="@+id/input"
+        android:icon="@drawable/asthma"
+        android:title="Input" />
     <item
         android:id="@+id/triage"
         android:icon="@drawable/outline_brightness_alert_24"
-        android:title="Not Feeling Well?"/>
+        android:title="Having Trouble Breathing?" />
+    <item
+        android:id="@+id/motivation"
+        android:icon="@drawable/icon"
+        android:title="Motivation" />
+    <item
+        android:id="@+id/child_sign_out"
+        android:icon="@drawable/baseline_person_24"
+        android:title="Sign out" />
 
 </menu>

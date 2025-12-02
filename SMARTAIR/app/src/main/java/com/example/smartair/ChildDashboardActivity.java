@@ -3,11 +3,9 @@ package com.example.smartair;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,14 +27,9 @@ public class ChildDashboardActivity extends AppCompatActivity {
     XYPlot plot;
     Button toggle;
     GraphActivity graph;
-    boolean week= true;
+    boolean week;
     BottomNavigationView navBar;
-    NavBarActivity nav= new NavBarActivity();
-    // test data
-    Number[] monthlyDate = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};
-    Number[] monthlyData = {1, 2, 3, 4, 22, 6, 7, 8, 9, 10, 11, 12, 13, 12, 15, 16, 17, 18, 31, 20, 21, 22, 23, 24, 25, 212, 27, 28, 29, 30};
-    Number[] weeklyDate = {1, 2, 3, 4, 5, 6, 7};
-    Number[] weeklyData = {24, 25, 212, 27, 28, 29, 30};
+    NavBarActivity nav;
     Button input;
     DatabaseReference reference;
     FirebaseUser user;
@@ -55,6 +48,12 @@ public class ChildDashboardActivity extends AppCompatActivity {
                 startActivity(j);
             });
         }
+        nav = new NavBarActivity();
+        week = true;
+        navBar.setOnItemSelectedListener(item-> {
+            nav.childNav(ChildDashboardActivity.this, item.getItemId(), getIntent());
+            return true;
+        });
         namebox= findViewById(R.id.textView8);
         namebox.setText("Welcome "+ child.getName());
         plot = findViewById(R.id.plot);
@@ -141,9 +140,5 @@ public class ChildDashboardActivity extends AppCompatActivity {
                 }
             }
         }
-        navBar.setOnItemSelectedListener(item-> {
-            nav.childNav(ChildDashboardActivity.this, item.getItemId());
-            return true;
-        });
     }
 }
