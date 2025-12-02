@@ -37,6 +37,14 @@ public class ChildDashboardActivity extends AppCompatActivity {
             Intent j = new Intent(this, SignOut.class);
             startActivity(j);
         });
+        Button button2 = findViewById(R.id.button13);
+        button2.setOnClickListener(v -> {
+            Intent l = new Intent(this, Child_Motivation.class);
+            if (i.hasExtra("PARENT_VIEW")) {
+                l.putExtra("PARENT_VIEW", (Parcelable) i.getParcelableExtra("PARENT_VIEW"));
+            }
+            startActivity(l);
+        });
         input = findViewById(R.id.button12);
         input.setOnClickListener(v -> {
             Intent k = new Intent(this, Child_Input.class);
