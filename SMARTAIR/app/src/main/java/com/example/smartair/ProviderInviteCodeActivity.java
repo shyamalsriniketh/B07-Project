@@ -2,7 +2,6 @@ package com.example.smartair;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -69,7 +68,6 @@ public class ProviderInviteCodeActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("FIREBASE", "Error: " + error.getMessage());
                 Toast.makeText(ProviderInviteCodeActivity.this,
                         "Failed to validate code", Toast.LENGTH_SHORT).show();
             }

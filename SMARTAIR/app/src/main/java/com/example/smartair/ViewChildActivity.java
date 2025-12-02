@@ -3,7 +3,6 @@ package com.example.smartair;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -244,6 +243,9 @@ public class ViewChildActivity extends AppCompatActivity {
                                     double percent = Double.parseDouble(input);
                                     if (percent >= 0 && percent <= 100) {
                                         reference.child("children").child(finalSnapshots.getKey()).child(key).setValue(percent);
+                                        if (percent <= 20) {
+                                            reference.child("alerts").child(user.getUid()).child("inventoryLow").setValue(true);
+                                        }
                                     }
                                     else {
                                         Toast.makeText(ViewChildActivity.this, "Invalid input", Toast.LENGTH_LONG).show();
