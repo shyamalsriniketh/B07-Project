@@ -48,11 +48,12 @@
 
     <Button
         android:id="@+id/add_child_back_button"
-        android:layout_width="66dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16sp"
+        android:layout_marginTop="16sp"
         android:text="@string/back"
+        android:textSize="24sp"
         app:icon="@android:drawable/ic_media_rew"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
