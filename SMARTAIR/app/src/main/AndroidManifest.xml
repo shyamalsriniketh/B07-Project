@@ -14,6 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SMARTAIR">
         <activity
+            android:name=".HistoryItem"
+            android:exported="false" />
+        <activity
+            android:name=".HistoryBrowser"
+            android:exported="false" />
+        <activity
             android:name=".Child_Badges"
             android:exported="false" />
         <activity
