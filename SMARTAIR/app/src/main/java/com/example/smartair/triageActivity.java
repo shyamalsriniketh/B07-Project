@@ -42,6 +42,7 @@ import java.util.Locale;
 
 
 public class triageActivity extends AppCompatActivity {
+    private int latestPEF = -1;
     String category;
     boolean escalation = false;
     String chosenPlan = "";
@@ -122,6 +123,8 @@ public class triageActivity extends AppCompatActivity {
         escalation = false;
         chosenPlan = "";
 
+        preloadLatestPEF();
+
     }
     private void updateButtonState() {
         boolean redFlag = cbCantSpeak.isChecked()
@@ -161,12 +164,12 @@ public class triageActivity extends AppCompatActivity {
 
         int nowPEF = parseIntSafe(editPEF.getText().toString(), -1);
         if(nowPEF == -1) {
-            loadLatestPEF(childUid, latest -> {
-                int fixedPEF = (latest != -1) ? latest : pbValue;
-                finishDecisionWithPEF(fixedPEF,nowCantSpeak,nowChest,nowBlue,nowRescue);
-            });
-            return;
+            nowPEF = (latestPEF != -1) ? latestPEF : pbValue;
+
+
         }
+
+
         finishDecisionWithPEF(nowPEF,nowCantSpeak,nowChest,nowBlue,nowRescue);
 
 
@@ -468,8 +471,16 @@ public class triageActivity extends AppCompatActivity {
         if (worseSymptoms) category = "Emergency";
         IncidentLog I = new IncidentLog(category,nowCantSpeak,nowChest,nowBlue,nowRescue,nowPEF,chosenPlan,childUid);
         saveIncidentLogToFirebase(I);
+
     }
 
+    private void preloadLatestPEF() {
+        loadLatestPEF(childUid, latest -> {
+            if (latest != -1) {
+                latestPEF = latest; // store it for later use
+            }
+        });
+    }
 
 
 
