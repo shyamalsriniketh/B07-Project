@@ -33,7 +33,7 @@ public class RoleSelectionActivity extends AppCompatActivity {
         startActivity(i);
     }
     public void backToLogin(View v){
-        Intent i = new Intent(this,Login.class);
+        Intent i = new Intent(this, LoginView.class);
         startActivity(i);
     }
 }
