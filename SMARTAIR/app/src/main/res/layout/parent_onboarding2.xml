@@ -6,30 +6,28 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="284dp"
-        android:layout_height="476dp"
-        android:layout_marginStart="61dp"
-        android:layout_marginTop="118dp"
-        android:layout_marginEnd="62dp"
-        android:layout_marginBottom="137dp"
-        android:text="blah blah blah"
+        android:id="@+id/textView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10sp"
+        android:layout_marginEnd="10sp"
+        android:text="@string/not_child_purpose"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/textView8" />
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="286dp"
-        android:layout_height="63dp"
-        android:layout_marginStart="61dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="62dp"
-        android:layout_marginBottom="620dp"
-        android:text="our purpose"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/textView8"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10sp"
+        android:layout_marginEnd="10sp"
+        android:text="@string/our_purpose"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

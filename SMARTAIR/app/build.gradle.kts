@@ -37,6 +37,8 @@ android {
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:34.5.0"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("com.androidplot:androidplot-core:1.5.10")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -46,6 +48,7 @@ dependencies {
     implementation(libs.viewpager2)
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:13.0.0")
     testImplementation(libs.junit)
+    testImplementation("org.mockito:mockito-core:5.20.0")
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }
