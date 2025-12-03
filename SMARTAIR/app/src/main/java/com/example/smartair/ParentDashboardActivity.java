@@ -90,7 +90,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
                 dropdown.setKeyListener(null);
 
                 navBar.setOnItemSelectedListener(item-> {
-                    nav.parentNav(ParentDashboardActivity.this, item.getItemId());
+                    nav.parentNav(ParentDashboardActivity.this, item.getTitle().toString());
                     return true;
                 });
 

@@ -111,7 +111,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
                 //set text for weekly count
 
                 navBar.setOnItemSelectedListener(item-> {
-                    nav.childNav(ChildDashboardActivity.this, item.getItemId(), i);
+                    nav.childNav(ChildDashboardActivity.this, item.getTitle().toString(), i);
                     return true;
                 });
 

@@ -51,34 +51,34 @@ public class NavBarActivity {
         context.startActivity(intent);
     }
 
-    public void parentNav(Context context, int itemId) {
-        switch(itemId) {
-            case R.id.my_children:
+    public void parentNav(Context context, String itemTitle) {
+        switch(itemTitle) {
+            case "My Children":
                 myChildren(context);
                 break;
-            case R.id.sign_out:
+            case "Sign out":
                 signOut(context);
                 break;
-            case R.id.dashboard:
+            case "Dashboard":
                 parentDashboard(context);
                 break;
         }
     }
-    public void childNav(Context context, int itemId, Intent intent) {
-        switch (itemId) {
-            case R.id.child_dashboard:
+    public void childNav(Context context, String itemTitle, Intent intent) {
+        switch (itemTitle) {
+            case "Dashboard":
                 childDashboard(context, intent);
                 break;
-            case R.id.input:
+            case "Input":
                 input(context, intent);
                 break;
-            case R.id.triage:
+            case "Having Trouble Breathing?":
                 triage(context, intent);
                 break;
-            case R.id.motivation:
+            case "Motivation":
                 motivation(context, intent);
                 break;
-            case R.id.child_sign_out:
+            case "Sign out":
                 signOut(context);
                 break;
         }
