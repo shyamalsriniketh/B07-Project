@@ -83,9 +83,24 @@ public class ChildDashboardActivity extends AppCompatActivity {
                     }
                 });*/
 
+                DataSnapshot lastRescue = null;
+                for (DataSnapshot rescue : snapshot.child("logs").child(user.getUid()).child("rescue").getChildren()) {
+                    lastRescue = rescue;
+                }
+                if (lastRescue == null) {
+                    lastRescueTime.setText("No rescues yet");
+                }
+                else {
+                    lastRescueTime.setText(((System.currentTimeMillis() - Long.parseLong(lastRescue.getKey())) / (1000.0 * 60.0 * 60.0)) + " hours ago");
+                }
 
-                //set text for last rescue time
-                //set text for weekly count
+                int count = 0;
+                for (DataSnapshot rescue : snapshot.child("logs").child(user.getUid()).child("rescue").getChildren()) {
+                    if (Long.parseLong(rescue.getKey()) > System.currentTimeMillis() - 7 * (1000L * 60 * 60 * 24)) {
+                        count++;
+                    }
+                }
+                weeklyCount.setText(String.valueOf(count));
 
                 DataSnapshot latestPEFEntry = null;
                 for (DataSnapshot pefEntries : snapshot.child("logs").child(user.getUid()).child("pef").getChildren()) {

@@ -43,6 +43,8 @@ public class ParentDashboardActivity extends AppCompatActivity {
     int len;
     ArrayList<String> childNames;
     AutoCompleteTextView dropdown;
+    DatabaseReference reference;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +52,8 @@ public class ParentDashboardActivity extends AppCompatActivity {
         setContentView(R.layout.parent_dashboard);
         displayAlerts();
         nav = new NavBarActivity();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         zone = findViewById(R.id.tile_text2);
         lastRescueTime = findViewById(R.id.tile_text4);
         weeklyCount = findViewById(R.id.tile_text6);
@@ -124,15 +126,59 @@ public class ParentDashboardActivity extends AppCompatActivity {
     public void changeChildView(String childUid, String childName){
         dropdown.setText("");
         dropdown.setHint(childName + "'s data");
-        //zone.setText(child's current zone);
-        //lastRescueTime.setText(child's last rescue time);
-        //weeklyCount.setText(child's weekly rescue count);
         /*graph = new GraphActivity(plot, childUid);
         if (week) {
             graph.weeklyView();
         } else {
             graph.monthlyView();
         }*/
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                DataSnapshot lastRescue = null;
+                for (DataSnapshot rescue : snapshot.child("logs").child(childUid).child("rescue").getChildren()) {
+                    lastRescue = rescue;
+                }
+                if (lastRescue == null) {
+                    lastRescueTime.setText("No rescues yet");
+                }
+                else {
+                    lastRescueTime.setText(((System.currentTimeMillis() - Long.parseLong(lastRescue.getKey())) / (1000.0 * 60.0 * 60.0)) + " hours ago");
+                }
+
+                int count = 0;
+                for (DataSnapshot rescue : snapshot.child("logs").child(childUid).child("rescue").getChildren()) {
+                    if (Long.parseLong(rescue.getKey()) > System.currentTimeMillis() - 7 * (1000L * 60 * 60 * 24)) {
+                        count++;
+                    }
+                }
+                weeklyCount.setText(String.valueOf(count));
+
+                DataSnapshot latestPEFEntry = null;
+                for (DataSnapshot pefEntries : snapshot.child("logs").child(childUid).child("pef").getChildren()) {
+                    latestPEFEntry = pefEntries;
+                }
+                int pb = snapshot.child("children").child(childUid).child("pb").getValue(Integer.class);
+                if (String.valueOf(latestPEFEntry.getValue(Object.class)).equals("No entry today") || pb == 0) {
+                    zone.setText("No zone");
+                    return;
+                }
+                int curPEF = latestPEFEntry.getValue(Integer.class);
+                double percent = (double) (curPEF) / pb;
+                if (percent >= 0.8) {
+                    zone.setText("Green zone");
+                }
+                else if (percent >= 0.5) {
+                    zone.setText("Yellow zone");
+                }
+                else {
+                    zone.setText("Red zone");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
     }
 
     private void displayAlerts() {
