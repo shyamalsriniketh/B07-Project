@@ -3,6 +3,7 @@ package com.example.smartair;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
+import android.util.Log;
 
 public class NavBarActivity {
     public static void parentDashboard(Context context) {

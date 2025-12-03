@@ -2,6 +2,7 @@ package com.example.smartair;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -43,6 +44,11 @@ public class ChildDashboardActivity extends AppCompatActivity {
         if (i.hasExtra("PARENT_VIEW")) {
             back = findViewById(R.id.back);
             back.setVisibility(View.VISIBLE);
+            back.setOnClickListener(v -> {
+                FirebaseAuth.getInstance().updateCurrentUser(i.getParcelableExtra("PARENT_VIEW"));
+                Intent j = new Intent(ChildDashboardActivity.this, ViewChildActivity.class);
+                startActivity(j);
+            });
         }
 
         nav = new NavBarActivity();
@@ -77,6 +83,10 @@ public class ChildDashboardActivity extends AppCompatActivity {
                     }
                 });
 
+
+                //set text for last rescue time
+                //set text for weekly count
+
                 DataSnapshot latestPEFEntry = null;
                 for (DataSnapshot pefEntries : snapshot.child("logs").child(user.getUid()).child("pef").getChildren()) {
                     latestPEFEntry = pefEntries;
@@ -106,24 +116,14 @@ public class ChildDashboardActivity extends AppCompatActivity {
                 if (latestZoneEntry == null || !latestZoneEntry.getValue(String.class).equals(zone.getText().toString())) {
                     reference.child("logs").child(user.getUid()).child("zoneChanges").child(String.valueOf(System.currentTimeMillis())).setValue(zone.getText().toString());
                 }
-
-                //set text for last rescue time
-                //set text for weekly count
-
-                navBar.setOnItemSelectedListener(item-> {
-                    nav.childNav(ChildDashboardActivity.this, item.getTitle().toString(), i);
-                    return true;
-                });
-
-                back.setOnClickListener(v -> {
-                    FirebaseAuth.getInstance().updateCurrentUser(i.getParcelableExtra("PARENT_VIEW"));
-                    Intent j = new Intent(ChildDashboardActivity.this, ViewChildActivity.class);
-                    startActivity(j);
-                });
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
+        });
+        navBar.setOnItemSelectedListener(item-> {
+            nav.childNav(ChildDashboardActivity.this, item.getTitle().toString(), i);
+            return true;
         });
     }
 
