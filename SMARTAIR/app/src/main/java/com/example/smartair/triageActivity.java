@@ -12,6 +12,7 @@ import java.util.Locale;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -63,7 +64,7 @@ public class triageActivity extends AppCompatActivity {
 
     boolean worseSymptoms;
     CheckBox cbCantSpeak, cbChestPulling, cbBlueLips;
-    Button btnDecision;
+    Button btnDecision, back;
 
     EditText editRescueAttempts, editPEF;
 
@@ -89,7 +90,7 @@ public class triageActivity extends AppCompatActivity {
         });
 
 
-
+        back = findViewById(R.id.backButton);
         cbCantSpeak = findViewById(R.id.checkbox_cant_speak);
         cbChestPulling = findViewById(R.id.checkbox_chest_pulling);
         cbBlueLips = findViewById(R.id.checkbox_blue_lips);
@@ -98,6 +99,14 @@ public class triageActivity extends AppCompatActivity {
         editPEF = findViewById(R.id.edit_pef);
 
         prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+        back.setOnClickListener(v -> {
+            Intent i = new Intent(this, ChildDashboardActivity.class);
+            if (getIntent().hasExtra("PARENT_VIEW")) {
+                i.putExtra("PARENT_VIEW", (Parcelable) getIntent().getParcelableExtra("PARENT_VIEW"));
+            }
+            startActivity(i);
+        });
 
 
         //firebase

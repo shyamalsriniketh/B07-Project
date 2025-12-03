@@ -3,6 +3,7 @@ package com.example.smartair;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -44,7 +45,7 @@ public class homeStepsActivity extends AppCompatActivity {
         // deciding action plan
 
         String planText = getIntent().getStringExtra("planText");
-
+        Log.d("testing123", planText);
 
 
 

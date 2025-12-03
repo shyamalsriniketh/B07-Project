@@ -67,7 +67,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 child = snapshot.child("children").child(user.getUid()).getValue(Child.class);
-                namebox.setText("Welcome "+ child.getName());
+                namebox.setText("Welcome "+ (!child.getName().equals("") ? child.getName() : child.getId()));
                 //graph = new GraphActivity(plot, child.getId());
 
                 /*graph.showWeeklyView();
