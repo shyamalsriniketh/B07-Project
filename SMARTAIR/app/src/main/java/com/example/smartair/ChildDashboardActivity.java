@@ -107,7 +107,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
                     latestPEFEntry = pefEntries;
                 }
                 int pb = snapshot.child("children").child(user.getUid()).child("pb").getValue(Integer.class);
-                if (String.valueOf(latestPEFEntry.getValue(Object.class)).equals("No entry today") || pb == 0) {
+                if (latestPEFEntry == null || String.valueOf(latestPEFEntry.getValue(Object.class)).equals("No entry today") || pb == 0) {
                     zone.setText("No zone");
                     return;
                 }
