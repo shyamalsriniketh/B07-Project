@@ -68,9 +68,9 @@ public class ChildDashboardActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 child = snapshot.child("children").child(user.getUid()).getValue(Child.class);
                 namebox.setText("Welcome "+ child.getName());
-                graph = new GraphActivity(plot, child.getId());
+                //graph = new GraphActivity(plot, child.getId());
 
-                graph.showWeeklyView();
+                /*graph.showWeeklyView();
                 toggle.setOnClickListener(view -> {
                     if (week) {
                         graph.monthlyView();
@@ -81,7 +81,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
                         toggle.setText("Show Monthly");
                         week = true;
                     }
-                });
+                });*/
 
 
                 //set text for last rescue time
