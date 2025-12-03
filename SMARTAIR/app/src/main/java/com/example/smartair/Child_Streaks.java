@@ -55,8 +55,8 @@ public class Child_Streaks extends AppCompatActivity {
                         streak[0] = 0;
                     }
                 }
-                controllerStreak.setText(streak + " days");
-                techniqueStreak.setText(streak + " days");
+                controllerStreak.setText(streak[0] + " day(s)");
+                techniqueStreak.setText(streak[0] + " day(s)");
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
