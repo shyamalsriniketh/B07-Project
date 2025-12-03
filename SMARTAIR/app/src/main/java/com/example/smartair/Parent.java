@@ -2,7 +2,7 @@ package com.example.smartair;
 import java.util.ArrayList;
 
 public class Parent extends User {
-    ArrayList<Child> linkedChildren;
+    ArrayList<String> linkedChildren;
 
     public Parent() {
         super();
@@ -12,11 +12,11 @@ public class Parent extends User {
         linkedChildren = new ArrayList<>();
     }
 
-    public ArrayList<Child> getLinkedChildren() {
+    public ArrayList<String> getLinkedChildren() {
         return linkedChildren;
     }
 
-    public void setLinkedChildren(ArrayList<Child> linkedChildren) {
+    public void setLinkedChildren(ArrayList<String> linkedChildren) {
         this.linkedChildren = linkedChildren;
     }
 }

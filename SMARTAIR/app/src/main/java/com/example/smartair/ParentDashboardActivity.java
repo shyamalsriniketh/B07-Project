@@ -33,14 +33,12 @@ public class ParentDashboardActivity extends AppCompatActivity {
     Button toggle;
     boolean week;
     GraphActivity graph;
-    ArrayList<Child> linkedChildren;
     TextView zone;
     TextView lastRescueTime;
     TextView weeklyCount;
-    Parent parent;
+    Parent par;
     NavBarActivity nav;
     BottomNavigationView navBar;
-    Child first;
     TextView namebox;
     int len;
     ArrayList<String> childNames;
@@ -66,22 +64,20 @@ public class ParentDashboardActivity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                parent = snapshot.child("parents").child(user.getUid()).getValue(Parent.class);
-                linkedChildren = parent.getLinkedChildren();
+                par = snapshot.child("parents").child(user.getUid()).getValue(Parent.class);
                 week = true;
                 childNames = new ArrayList<>();
-                for (Child child : linkedChildren) {
-                    childNames.add(child.getName());
+                for (String childUid : par.getLinkedChildren()) {
+                    childNames.add(snapshot.child("children").child(childUid).child("id").getValue(String.class));
                 }
-                len = linkedChildren.size();
-                namebox.setText("Welcome " + parent.getId());
+                len = childNames.size();
+                namebox.setText("Welcome " + par.getId());
 
                 if (len == 0) {
                     Toast.makeText(ParentDashboardActivity.this, "No children linked yet!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                first = linkedChildren.get(0);
                 dropdown.setFocusable(false);
                 dropdown.setClickable(true);
                 dropdown.setTextIsSelectable(false);
@@ -89,18 +85,9 @@ public class ParentDashboardActivity extends AppCompatActivity {
                 dropdown.setCursorVisible(false);
                 dropdown.setKeyListener(null);
 
-                navBar.setOnItemSelectedListener(item-> {
-                    nav.parentNav(ParentDashboardActivity.this, item.getTitle().toString());
-                    return true;
-                });
-
-                dropdown.setText(first.getName());
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(ParentDashboardActivity.this, android.R.layout.simple_dropdown_item_1line, childNames);
                 dropdown.setAdapter(adapter);
-                dropdown.setOnClickListener(v -> {
-                    dropdown.showDropDown();
-                });
-                changeChildView(first);
+                dropdown.setOnClickListener(v -> dropdown.showDropDown());
 
                 toggle.setOnClickListener(view -> {
                     if (week) {
@@ -116,23 +103,28 @@ public class ParentDashboardActivity extends AppCompatActivity {
 
                 dropdown.setOnItemClickListener((parent, view, position, id) -> {
                     String selectedItem = (String) parent.getItemAtPosition(position);
-                    Child selectedChild = linkedChildren.get(position);
+                    String selectedChild = par.getLinkedChildren().get(position);
                     Toast.makeText(ParentDashboardActivity.this, "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
-                    changeChildView(selectedChild);
+                    changeChildView(selectedChild, selectedItem);
                 });
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
+
+        navBar.setOnItemSelectedListener(item-> {
+            nav.parentNav(ParentDashboardActivity.this, item.getTitle().toString());
+            return true;
+        });
     }
-    public void changeChildView(Child selectedChild){
+    public void changeChildView(String childUid, String childName){
         dropdown.setText("");
-        dropdown.setHint(selectedChild.getName()+ "'s data");
+        dropdown.setHint(childName + "'s data");
         //zone.setText(child's current zone);
         //lastRescueTime.setText(child's last rescue time);
         //weeklyCount.setText(child's weekly rescue count);
-        graph = new GraphActivity(plot, selectedChild.getId());
+        graph = new GraphActivity(plot, childUid);
         if (week) {
             graph.weeklyView();
         } else {
