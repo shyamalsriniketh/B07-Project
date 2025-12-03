@@ -39,6 +39,7 @@ public class ViewChildActivity extends AppCompatActivity {
     Button viewAsChild;
     Button shareWithProvider;
     Button viewInventory;
+    Button viewHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class ViewChildActivity extends AppCompatActivity {
         viewAsChild = findViewById(R.id.view_as_child);
         shareWithProvider = findViewById(R.id.share_with_provider);
         viewInventory = findViewById(R.id.inventory);
+        viewHistory = findViewById(R.id.history);
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -128,6 +130,12 @@ public class ViewChildActivity extends AppCompatActivity {
                 shareWithProvider.setOnClickListener(v -> {
                     Intent i = new Intent(ViewChildActivity.this, InvitingProviderActivity.class); //should go to screen where toggles are first
                     i.putExtra("CHILD_UID", finalSnapshots.getKey());
+                    startActivity(i);
+                });
+
+                viewHistory.setOnClickListener(v -> {
+                    Intent i = new Intent(ViewChildActivity.this, HistoryBrowser.class);
+                    i.putExtra("childId", finalSnapshots.getKey());
                     startActivity(i);
                 });
 
@@ -218,6 +226,7 @@ public class ViewChildActivity extends AppCompatActivity {
                     viewAsChild.setVisibility(View.INVISIBLE);
                     shareWithProvider.setVisibility(View.INVISIBLE);
                     viewInventory.setVisibility(View.INVISIBLE);
+                    viewHistory.setVisibility(View.INVISIBLE);
 
                     save.setOnClickListener(v -> {
                         String input = dataInput.getText().toString();
@@ -303,6 +312,7 @@ public class ViewChildActivity extends AppCompatActivity {
                         viewAsChild.setVisibility(View.VISIBLE);
                         shareWithProvider.setVisibility(View.VISIBLE);
                         viewInventory.setVisibility(View.VISIBLE);
+                        viewHistory.setVisibility(View.VISIBLE);
                     });
                 });
             }
