@@ -34,12 +34,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import org.json.JSONArray;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Locale;
-
 
 public class triageActivity extends AppCompatActivity {
     private int latestPEF = -1;

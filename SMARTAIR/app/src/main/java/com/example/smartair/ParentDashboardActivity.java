@@ -3,6 +3,7 @@ package com.example.smartair;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -40,7 +41,6 @@ public class ParentDashboardActivity extends AppCompatActivity {
     NavBarActivity nav;
     BottomNavigationView navBar;
     TextView namebox;
-    int len;
     ArrayList<String> childNames;
     AutoCompleteTextView dropdown;
     DatabaseReference reference;
@@ -69,16 +69,14 @@ public class ParentDashboardActivity extends AppCompatActivity {
                 par = snapshot.child("parents").child(user.getUid()).getValue(Parent.class);
                 week = true;
                 childNames = new ArrayList<>();
-                for (String childUid : par.getLinkedChildren()) {
-                    childNames.add(snapshot.child("children").child(childUid).child("id").getValue(String.class));
-                }
-                len = childNames.size();
-                namebox.setText("Welcome " + par.getId());
-
-                if (len == 0) {
+                if (par.getLinkedChildren() == null) {
                     Toast.makeText(ParentDashboardActivity.this, "No children linked yet!", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                for (String childUid : par.getLinkedChildren()) {
+                    childNames.add(snapshot.child("children").child(childUid).child("id").getValue(String.class));
+                }
+                namebox.setText("Welcome " + par.getId());
 
                 dropdown.setFocusable(false);
                 dropdown.setClickable(true);
