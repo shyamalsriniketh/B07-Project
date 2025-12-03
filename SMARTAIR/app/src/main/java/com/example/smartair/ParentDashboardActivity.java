@@ -32,7 +32,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
     XYPlot plot;
     Button toggle;
     boolean week;
-    GraphActivity graph;
+    //GraphActivity graph;
     TextView zone;
     TextView lastRescueTime;
     TextView weeklyCount;
@@ -89,7 +89,10 @@ public class ParentDashboardActivity extends AppCompatActivity {
                 dropdown.setAdapter(adapter);
                 dropdown.setOnClickListener(v -> dropdown.showDropDown());
 
-                toggle.setOnClickListener(view -> {
+                /*toggle.setOnClickListener(view -> {
+                    if (dropdown.getText().toString().equals("Select a child")) {
+                        return;
+                    }
                     if (week) {
                         graph.monthlyView();
                         toggle.setText("Show Weekly");
@@ -99,7 +102,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
                         toggle.setText("Show Monthly");
                         week = true;
                     }
-                });
+                });*/
 
                 dropdown.setOnItemClickListener((parent, view, position, id) -> {
                     String selectedItem = (String) parent.getItemAtPosition(position);
@@ -124,12 +127,12 @@ public class ParentDashboardActivity extends AppCompatActivity {
         //zone.setText(child's current zone);
         //lastRescueTime.setText(child's last rescue time);
         //weeklyCount.setText(child's weekly rescue count);
-        graph = new GraphActivity(plot, childUid);
+        /*graph = new GraphActivity(plot, childUid);
         if (week) {
             graph.weeklyView();
         } else {
             graph.monthlyView();
-        }
+        }*/
     }
 
     private void displayAlerts() {
