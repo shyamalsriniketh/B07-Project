@@ -5,12 +5,12 @@
     android:id="@+id/loginActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login">
+    tools:context=".LoginView">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Login"
+        tools:context=".LoginView"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="-25dp">
 

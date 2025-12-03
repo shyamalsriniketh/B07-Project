@@ -12,13 +12,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         runChecks();
-        Intent i = new Intent(this, Login.class);
+        Intent i = new Intent(this, LoginView.class);
         startActivity(i);
     }
 
@@ -49,6 +54,24 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (!enteredPEF) {
                         ref.child("logs").child(childUid.getKey()).child("pef").child(String.valueOf(System.currentTimeMillis())).setValue("No entry today");
+                    }
+                }
+
+                DataSnapshot child;
+                Date curDate = new Date();
+                DateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+                for (DataSnapshot parentUid : snapshot.child("parents").getChildren()) {
+                    for (DataSnapshot childUid : parentUid.child("linkedChildren").getChildren()) {
+                        child = snapshot.child("children").child(childUid.getValue(String.class));
+                        try {
+                            if (curDate.before(sdf.parse(child.child("rescueExpiryDate").getValue(String.class)))
+                                    || curDate.before(sdf.parse(child.child("controllerExpiryDate").getValue(String.class)))) {
+                                ref.child("alerts").child(parentUid.getKey()).child("inventoryExpired").setValue(true);
+                                return;
+                            }
+                        } catch (ParseException e) {
+                            return;
+                        }
                     }
                 }
             }

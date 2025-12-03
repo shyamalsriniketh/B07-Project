@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import android.widget.CheckBox;
@@ -91,7 +92,23 @@ public class Child_Input extends AppCompatActivity {
     }
 
     private void handleLowInventory() {
-        //schedule alert
-        FirebaseDatabase.getInstance().getReference().child("children").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("inventoryMarkedLow").setValue(true);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        ref.child("children").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("inventoryMarkedLow").setValue(true);
+        ref.child("parents").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot parent : snapshot.getChildren()) {
+                    for (DataSnapshot child : parent.child("linkedChildren").getChildren()) {
+                        if (child.getValue(String.class).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                            ref.child("alerts").child(parent.getKey()).child("inventoryLow").setValue(true);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
     }
 }

@@ -2,7 +2,6 @@ package com.example.smartair;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -69,19 +68,25 @@ public class OnboardingActivity extends AppCompatActivity {
                 return Arrays.asList(
                         new ParentOnboardingFragment1(),
                         new ParentOnboardingFragment2(),
-                        new ParentOnboardingFragment3()
+                        new ParentOnboardingFragment3(),
+                        new ParentOnboardingFragment4(),
+                        new ParentOnboardingFragment5(),
+                        new ParentOnboardingFragment6()
                 );
             case 2:
                 return Arrays.asList(
                         new ChildOnboardingFragment1(),
                         new ChildOnboardingFragment2(),
-                        new ChildOnboardingFragment3()
+                        new ChildOnboardingFragment3(),
+                        new ChildOnboardingFragment4(),
+                        new ChildOnboardingFragment5()
                 );
             case 3:
                 return Arrays.asList(
-                        new ProviderOnboardingFragment(),
+                        new ProviderOnboardingFragment1(),
                         new ProviderOnboardingFragment2(),
-                        new ProviderOnboardingFragment3()
+                        new ProviderOnboardingFragment3(),
+                        new ProviderOnboardingFragment4()
                 );
             default:
                 return Collections.emptyList();

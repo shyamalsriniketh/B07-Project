@@ -9,9 +9,8 @@ android:background="#FFFFFF">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager"
-        android:layout_width="515dp"
-        android:layout_height="793dp"
-        android:layout_weight="1">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     </androidx.viewpager2.widget.ViewPager2>
 

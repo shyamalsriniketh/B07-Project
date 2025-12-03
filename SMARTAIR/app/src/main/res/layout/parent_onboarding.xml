@@ -15,10 +15,10 @@
 
 
     <LinearLayout
-        android:layout_width="316dp"
-        android:layout_height="782dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10sp"
+        android:layout_marginEnd="10sp"
         android:background="#FFFFFF"
         android:gravity="center"
         android:orientation="vertical"
@@ -28,18 +28,18 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Welcome Parents!"
+            android:text="@string/welcome"
             android:textColor="#FF0000"
-            android:textSize="24sp" />
+            android:textSize="28sp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Get started with parent features"
-            android:textSize="16sp" />
+            android:layout_marginTop="16sp"
+            android:text="@string/swipe"
+            android:textSize="24sp" />
 
     </LinearLayout>
 

@@ -2,48 +2,154 @@ package com.example.smartair;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
+import com.androidplot.xy.XYPlot;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ChildDashboardActivity extends AppCompatActivity {
     Button back;
-    Button input;
+    TextView namebox;
+    Child child;
+    XYPlot plot;
+    Button toggle;
+    GraphActivity graph;
+    boolean week;
+    BottomNavigationView navBar;
+    NavBarActivity nav;
+    DatabaseReference reference;
+    FirebaseUser user;
+    TextView zone;
+    TextView lastRescueTime;
+    TextView weeklyCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_child_dashboard);
+        setContentView(R.layout.child_dashboard);
         Intent i = getIntent();
         if (i.hasExtra("PARENT_VIEW")) {
             back = findViewById(R.id.back);
             back.setVisibility(View.VISIBLE);
             back.setOnClickListener(v -> {
                 FirebaseAuth.getInstance().updateCurrentUser(i.getParcelableExtra("PARENT_VIEW"));
-                Intent j = new Intent(this, ViewChildActivity.class);
+                Intent j = new Intent(ChildDashboardActivity.this, ViewChildActivity.class);
                 startActivity(j);
             });
         }
-        Button button = findViewById(R.id.button8);
-        button.setOnClickListener(v -> {
-            Intent j = new Intent(this, SignOut.class);
-            startActivity(j);
-        });
-        input = findViewById(R.id.button12);
-        input.setOnClickListener(v -> {
-            Intent k = new Intent(this, Child_Input.class);
-            if (i.hasExtra("PARENT_VIEW")) {
-                k.putExtra("PARENT_VIEW", (Parcelable) i.getParcelableExtra("PARENT_VIEW"));
+
+        nav = new NavBarActivity();
+        week = true;
+        namebox = findViewById(R.id.textView8);
+        plot = findViewById(R.id.plot);
+        toggle = findViewById(R.id.button);
+        navBar = findViewById(R.id.bottomNavigationView);
+        zone = findViewById(R.id.tile_text2);
+        lastRescueTime = findViewById(R.id.tile_text4);
+        weeklyCount = findViewById(R.id.tile_text6);
+        reference = FirebaseDatabase.getInstance().getReference();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                child = snapshot.child("children").child(user.getUid()).getValue(Child.class);
+                namebox.setText("Welcome "+ (!child.getName().equals("") ? child.getName() : child.getId()));
+                //graph = new GraphActivity(plot, child.getId());
+
+                /*graph.showWeeklyView();
+                toggle.setOnClickListener(view -> {
+                    if (week) {
+                        graph.monthlyView();
+                        toggle.setText("Show Weekly");
+                        week = false;
+                    } else {
+                        graph.weeklyView();
+                        toggle.setText("Show Monthly");
+                        week = true;
+                    }
+                });*/
+
+                DataSnapshot lastRescue = null;
+                for (DataSnapshot rescue : snapshot.child("logs").child(user.getUid()).child("rescue").getChildren()) {
+                    lastRescue = rescue;
+                }
+                if (lastRescue == null) {
+                    lastRescueTime.setText("No rescues yet");
+                }
+                else {
+                    lastRescueTime.setText(((System.currentTimeMillis() - Long.parseLong(lastRescue.getKey())) / (1000.0 * 60.0 * 60.0)) + " hours ago");
+                }
+
+                int count = 0;
+                for (DataSnapshot rescue : snapshot.child("logs").child(user.getUid()).child("rescue").getChildren()) {
+                    if (Long.parseLong(rescue.getKey()) > System.currentTimeMillis() - 7 * (1000L * 60 * 60 * 24)) {
+                        count++;
+                    }
+                }
+                weeklyCount.setText(String.valueOf(count));
+
+                DataSnapshot latestPEFEntry = null;
+                for (DataSnapshot pefEntries : snapshot.child("logs").child(user.getUid()).child("pef").getChildren()) {
+                    latestPEFEntry = pefEntries;
+                }
+                int pb = snapshot.child("children").child(user.getUid()).child("pb").getValue(Integer.class);
+                if (String.valueOf(latestPEFEntry.getValue(Object.class)).equals("No entry today") || pb == 0) {
+                    zone.setText("No zone");
+                    return;
+                }
+                int curPEF = latestPEFEntry.getValue(Integer.class);
+                double percent = (double) (curPEF) / pb;
+                if (percent >= 0.8) {
+                    zone.setText("Green zone");
+                }
+                else if (percent >= 0.5) {
+                    zone.setText("Yellow zone");
+                }
+                else {
+                    zone.setText("Red zone");
+                    sendRedZoneAlert(snapshot);
+                }
+
+                DataSnapshot latestZoneEntry = null;
+                for (DataSnapshot zoneEntries : snapshot.child("logs").child(user.getUid()).child("zoneChanges").getChildren()) {
+                    latestZoneEntry = zoneEntries;
+                }
+                if (latestZoneEntry == null || !latestZoneEntry.getValue(String.class).equals(zone.getText().toString())) {
+                    reference.child("logs").child(user.getUid()).child("zoneChanges").child(String.valueOf(System.currentTimeMillis())).setValue(zone.getText().toString());
+                }
             }
-            startActivity(k);
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
+        navBar.setOnItemSelectedListener(item-> {
+            nav.childNav(ChildDashboardActivity.this, item.getTitle().toString(), i);
+            return true;
+        });
+    }
+
+    private void sendRedZoneAlert(DataSnapshot snapshot) {
+        for (DataSnapshot parent : snapshot.child("parents").getChildren()) {
+            for (DataSnapshot child : parent.child("linkedChildren").getChildren()) {
+                if (child.getValue(String.class).equals(user.getUid())) {
+                    reference.child("alerts").child(parent.getKey()).child("redZone").setValue(true);
+                    return;
+                }
+            }
+        }
     }
 }
