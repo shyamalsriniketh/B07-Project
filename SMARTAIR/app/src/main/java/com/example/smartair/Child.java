@@ -33,9 +33,9 @@ public class Child extends User {
         pb = 0;
         highQualitySessionNum = 0;
         lowRescueMonthNum = 0;
-        greenActionPlan = "";
-        yellowActionPlan = "";
-        redActionPlan = "";
+        greenActionPlan = "No green zone plan yet";
+        yellowActionPlan = "No yellow zone plan yet";
+        redActionPlan = "No red zone plan yet";
         additionalNotes = "";
         inviteCodeProvider = null;
         providerCodeExpiry = 0;

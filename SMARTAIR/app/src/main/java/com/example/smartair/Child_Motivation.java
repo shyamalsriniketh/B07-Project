@@ -21,10 +21,6 @@ public class Child_Motivation extends AppCompatActivity {
         badgesButton = findViewById(R.id.child_Motivation_Badges_button);
         back = findViewById(R.id.back_button);
 
-        if (getIntent().hasExtra("PARENT_VIEW")) {
-            back.setVisibility(View.VISIBLE);
-        }
-
         streaksButton.setOnClickListener(v -> {
             Intent intent = new Intent(Child_Motivation.this, Child_Streaks.class);
             if (getIntent().hasExtra("PARENT_VIEW")) {
@@ -42,9 +38,11 @@ public class Child_Motivation extends AppCompatActivity {
         });
 
         back.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().updateCurrentUser(getIntent().getParcelableExtra("PARENT_VIEW"));
-            Intent j = new Intent(this, ViewChildActivity.class);
-            startActivity(j);
+            Intent intent = new Intent(Child_Motivation.this, ChildDashboardActivity.class);
+            if (getIntent().hasExtra("PARENT_VIEW")) {
+                intent.putExtra("PARENT_VIEW", (Parcelable) getIntent().getParcelableExtra("PARENT_VIEW"));
+            }
+            startActivity(intent);
         });
     }
 }

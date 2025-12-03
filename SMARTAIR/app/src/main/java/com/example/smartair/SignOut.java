@@ -32,6 +32,8 @@ public class SignOut extends AppCompatActivity {
             startActivity(new Intent(this, LoginView.class));
             finish();
         });
+        Button cancel = findViewById(R.id.button6);
+        cancel.setOnClickListener(v -> finish());
     }
 
 }
